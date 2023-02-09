@@ -1,3 +1,5 @@
+import { HTMLElementWalker } from "./utils/HTMLElementWalker";
+
 export interface FocusableWalker {
   setCurrent: (element: HTMLElement) => void;
   next: () => HTMLElement | null;
@@ -6,23 +8,55 @@ export interface FocusableWalker {
   last: () => HTMLElement | null;
 }
 
-export type ZoneId = number | string;
+export interface IHTMLElementWalker {
+  firstChild(): HTMLElement | null;
+  lastChild(): HTMLElement | null;
+  nextElement(): HTMLElement | null;
+  nextSibling(): HTMLElement | null;
+  parentElement(): HTMLElement | null;
+  previousElement(): HTMLElement | null;
+  previousSibling(): HTMLElement | null;
+  currentElement: HTMLElement;
+  readonly root: HTMLElement;
+  readonly filter: HTMLElementFilter;
+};
 
-export interface ZoneOptions {
-  id?: ZoneId;
+export type HTMLElementFilter = (element: HTMLElement) => number;
+
+export type TabAreaId = number | string;
+export type EntityId = number | string;
+export type EntityType = 'arrowzone' | 'tabzone';
+
+export interface ArrowZoneOptions {
+  id: EntityId;
+  resetOnBlur?: boolean;
 }
 
-export interface Zone {
+export interface ArrowZone {
   element: HTMLElement;
-  id: ZoneId;
-  nextZone: Zone | undefined;
-  prevZone: Zone | undefined;
+  id: EntityId;
 }
 
-export interface ZoneCreateEvent {
-  zone: Zone;
+export type FocusKitEventHandler = (e: CustomEvent<BaseEvent>, state: FocusKitEventHandlerState, next: () => void) => void;
+export type Next = () => void;
+
+export type Pipe = {
+  use: (...middlewares: FocusKitEventHandler[]) => void;
+  handleEvent: (event: CustomEvent<BaseEvent>, state: FocusKitEventHandlerState) => void;
+};
+
+export interface FocusKitEventHandlerState {
+  elementWalker: HTMLElementWalker;
 }
 
-export interface ZoneDisposeEvent {
-  id: ZoneId;
+export interface BaseEvent<TEventType = 'move' | 'init'> {
+  id: EntityId;
+  entity: EntityType
+  type: TEventType
 }
+
+export interface MoveEvent extends BaseEvent<'move'> {
+  direction: 'next' | 'prev' | 'first' | 'last';
+}
+
+export interface InitEvent extends BaseEvent<'init'> { }

@@ -95,3 +95,13 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.group {
+  border: 1px solid cyan;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.group:focus, .group:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
