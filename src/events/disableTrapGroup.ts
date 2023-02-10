@@ -1,13 +1,12 @@
-import { ARROWZONE, INIT_EVENT } from "../constants";
+import { TRAPGROUP } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
-import { makeTabbable } from "../utils/makeTabbable";
-import { allFocusable, currentEntityFocusable } from "../utils/nodeFilters";
-import { isInitEvent } from "./assertions/isInitEvent";
+import { currentEntityFocusable } from "../utils/nodeFilters";
+import { isDisableTrapGroupEvent } from "./assertions/isDisableTrapGroupEvent";
 
-export const initArrowZone: FocusKitEventHandler = (event, state, next) => {
-  if (!isInitEvent(event) || event.detail.entity !== ARROWZONE) {
+export const disableTrapGroup: FocusKitEventHandler = (event, state, next) => {
+  if (!isDisableTrapGroupEvent(event) || event.detail.entity !== TRAPGROUP) {
     next();
     return;
   }
@@ -22,11 +21,7 @@ export const initArrowZone: FocusKitEventHandler = (event, state, next) => {
   elementWalker.currentElement = target;
   elementWalker.filter = currentEntityFocusable(target);
 
-  let cur: HTMLElement | null = elementWalker.nextElement();
-
-  if (cur) {
-    makeTabbable(cur)
-  }
+  let cur: HTMLElement | null = target;
 
   while (cur = elementWalker.nextElement()) {
     if (!(cur instanceof HTMLElement)) {

@@ -1,4 +1,4 @@
-import { FOCUSKIT_EVENT } from "../constants";
+import { FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isHTMLElement } from "../utils/isHTMLElement";
@@ -8,9 +8,9 @@ import { isAfter, isBefore } from "../utils/nodePosition";
 export class Trap {
   public element: HTMLElement;
   public id: EntityId;
+  public active: boolean = false;
 
   private _lastFocused: HTMLElement | null = null;
-  private _active: boolean = false;
   private _elementWalker: HTMLElementWalker;
 
   constructor(element: HTMLElement, options: { id: EntityId }) {
@@ -19,18 +19,19 @@ export class Trap {
     this.id = id;
     this._elementWalker = new HTMLElementWalker(document.body, allFocusable);
     this.element.addEventListener('focusin', this._onFocusIn, true);
+    this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
   }
 
   enable() {
     this.element.addEventListener('focusout', this._onFocusOut, true);
-    this._active = true;
+    this.active = true;
 
     console.log('enable trap', this.id);
   }
 
   disable() {
     this.element.removeEventListener('focusout', this._onFocusOut, true);
-    this._active = false;
+    this.active = false;
 
     console.log('disable trap', this.id);
   }
@@ -70,10 +71,6 @@ export class Trap {
   }
 
   private _onFocusIn = (e: FocusEvent) => {
-    if (!this._active) {
-      this.enable();
-    }
-
     const target = e.target;
     if (!isHTMLElement(target)) {
       return;
@@ -82,7 +79,7 @@ export class Trap {
     this._lastFocused = target;
   }
 
-  private _focusWithStrategy(strategy: FocusElementEvent['strategy']) {
+  protected _focusWithStrategy(strategy: FocusElementEvent['strategy']) {
     const detail: FocusElementEvent = {
       entity: 'trap',
       id: this.id,

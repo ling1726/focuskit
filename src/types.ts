@@ -25,7 +25,7 @@ export type HTMLElementFilter = (element: HTMLElement) => number;
 
 export type TabAreaId = number | string;
 export type EntityId = number | string;
-export type EntityType = 'arrowzone' | 'trap';
+export type EntityType = 'arrowzone' | 'trap' | 'trapgroup';
 
 export interface ArrowZoneOptions {
   id: EntityId;
@@ -49,7 +49,9 @@ export interface FocusKitEventHandlerState {
   elementWalker: HTMLElementWalker;
 }
 
-export interface BaseEvent<TEventType = 'move' | 'init' | 'focuselement'> {
+type EventTypes = 'move' | 'init' | 'focuselement' | 'enabletrapgroup' | 'disabletrapgroup';
+
+export interface BaseEvent<TEventType extends EventTypes = EventTypes> {
   id: EntityId;
   entity: EntityType
   type: TEventType
@@ -60,6 +62,10 @@ export interface MoveEvent extends BaseEvent<'move'> {
 }
 
 export interface InitEvent extends BaseEvent<'init'> { }
+
+export interface EnableTrapGroupEvent extends BaseEvent<'enabletrapgroup'> { }
+
+export interface DisableTrapGroupEvent extends BaseEvent<'disabletrapgroup'> { }
 
 export interface FocusElementEvent extends BaseEvent<'focuselement'> {
   target?: HTMLElement;

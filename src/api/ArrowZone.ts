@@ -1,5 +1,6 @@
-import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUSKIT_EVENT } from "../constants";
+import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
 import { ArrowZone as IArrowZone, InitEvent, EntityId, ArrowZoneOptions, MoveEvent } from "../types";
+import { isClosestEntity } from "../utils/isClosestEntity";
 import { isHTMLElement } from "../utils/isHTMLElement";
 
 export class ArrowZone implements IArrowZone {
@@ -14,7 +15,7 @@ export class ArrowZone implements IArrowZone {
     this.element = element;
     this._resetOnBlur = !!resetOnBlur;
     this.id = id;
-    this.element.setAttribute('data-zone', this.id.toString());
+    this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
     this.element.addEventListener('keydown', this._onKeyDown);
     this.element.addEventListener('focusout', this._onFocusOut);
     this._resetTabIndexes();
@@ -44,7 +45,7 @@ export class ArrowZone implements IArrowZone {
   }
 
   private _focus(direction: MoveEvent['direction']) {
-    const detail: MoveEvent= {
+    const detail: MoveEvent = {
       entity: 'arrowzone',
       id: this.id,
       type: 'move',
@@ -60,6 +61,24 @@ export class ArrowZone implements IArrowZone {
     if (e.defaultPrevented) {
       return;
     }
+
+    switch (e.key) {
+      case 'ArrowUp':
+      case 'ArrowLeft':
+      case 'ArrowDown':
+      case 'ArrowRight':
+      case 'Home':
+      case 'End':
+        break;
+      default:
+        return;
+    }
+
+    if (!isClosestEntity(this.element, e.target)) {
+      return;
+    }
+
+    e.preventDefault();
 
     switch (e.key) {
       case 'ArrowUp':

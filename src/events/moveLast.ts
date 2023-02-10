@@ -2,7 +2,7 @@ import { ARROWZONE, DIRECTION_LAST } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { focusNext } from "../utils/focusNext";
 import { isHTMLElement } from "../utils/isHTMLElement";
-import { allFocusable } from "../utils/nodeFilters";
+import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
 export const moveLast: FocusKitEventHandler = (event, state, next) => {
@@ -20,9 +20,10 @@ export const moveLast: FocusKitEventHandler = (event, state, next) => {
 
   const elementWalker = state.elementWalker;
   elementWalker.currentElement = target.lastElementChild as HTMLElement;
-  elementWalker.filter = allFocusable;
+  const filter = currentEntityFocusable(target);
+  elementWalker.filter = filter;
 
-  const nextFocused = allFocusable(elementWalker.currentElement) === NodeFilter.FILTER_ACCEPT
+  const nextFocused = filter(elementWalker.currentElement) === NodeFilter.FILTER_ACCEPT
     ? elementWalker.currentElement
     : elementWalker.previousElement();
   
