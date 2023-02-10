@@ -2,7 +2,7 @@ import { ARROWZONE, DIRECTION_FIRST } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { focusNext } from "../utils/focusNext";
 import { isHTMLElement } from "../utils/isHTMLElement";
-import { allFocusable, currentEntityFocusable } from "../utils/nodeFilters";
+import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
 export const moveFirst: FocusKitEventHandler = (event, state, next) => {

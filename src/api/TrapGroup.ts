@@ -15,6 +15,10 @@ export class TrapGroup extends Trap {
   }
 
   private _onKeyDown = (e: KeyboardEvent) => {
+    if (e.target !== this.element) {
+      return;
+    }
+
     switch(e.key) {
       case 'Enter':
         this.enable();

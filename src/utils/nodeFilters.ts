@@ -10,6 +10,7 @@ export const allFocusable: HTMLElementFilter = element => {
 }
 
 export const currentEntityFocusable: (target: HTMLElement) =>  HTMLElementFilter = target => element => {
+  // TODO remove contains, stop should not be here
   if (!isClosestEntity(target, element) || !target.contains(element)) {
     return NodeFilter.FILTER_REJECT;
   }
