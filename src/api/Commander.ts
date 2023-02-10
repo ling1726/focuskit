@@ -8,6 +8,9 @@ import { moveNext } from "../events/moveNext";
 import { movePrev } from "../events/movePrev";
 import { moveFirst } from "../events/moveFirst";
 import { moveLast } from "../events/moveLast";
+import { focusFirst } from "../events/focusFirst";
+import { focusLast } from "../events/focusLast";
+import { focusTarget } from "../events/focusTarget";
 
 export class Commander {
   public element: HTMLElement;
@@ -27,11 +30,18 @@ export class Commander {
     this._messagePipe.use(movePrev);
     this._messagePipe.use(moveFirst);
     this._messagePipe.use(moveLast);
+    this._messagePipe.use(focusFirst);
+    this._messagePipe.use(focusLast);
+    this._messagePipe.use(focusTarget);
   }
 
   private _handleEvent = (event: Event) => {
     if (!isFocusKitEvent(event)) {
       throw Error(`focuskit received an event of type ${event.type}, this is a bug`);
+    }
+
+    if (event.defaultPrevented) {
+      return;
     }
 
     console.log('handling event', event.detail);

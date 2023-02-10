@@ -1,19 +1,7 @@
-import { ArrowZone } from './api/ArrowZone';
-import { Commander } from './api/Commander';
 import './style.css'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<div id="container">
-  <button type="button">Foo</button>
-  <button type="button">Foo</button>
-  <button type="button">Foo</button>
-  <button type="button">Foo</button>
-  <button type="button">Foo</button>
-  <button type="button">Foo</button>
-</div>
-`
+import ArrowZoneScenario  from "./scenarios/ArrowZoneScenario";
+import TrapScenario from "./scenarios/TrapAcenario";
+import DisabledScenario from './scenarios/DisabledScenario';
 
-const container = document.getElementById('container')  as HTMLElement;
-new Commander(document.body);
-new ArrowZone(container, { id: 'test' });
-
+DisabledScenario();

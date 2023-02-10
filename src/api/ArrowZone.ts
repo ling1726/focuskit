@@ -40,7 +40,6 @@ export class ArrowZone implements IArrowZone {
     }
     const event = new CustomEvent<InitEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
 
-    console.log('dispatch event', detail);
     this.element.dispatchEvent(event);
   }
 
@@ -54,7 +53,6 @@ export class ArrowZone implements IArrowZone {
 
     const event = new CustomEvent<MoveEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
 
-    console.log('dispatch event', detail);
     this.element.dispatchEvent(event);
   }
 
