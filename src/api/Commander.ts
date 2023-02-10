@@ -11,6 +11,7 @@ import { moveLast } from "../events/moveLast";
 import { focusFirst } from "../events/focusFirst";
 import { focusLast } from "../events/focusLast";
 import { focusTarget } from "../events/focusTarget";
+import { isHTMLElement } from "../utils/isHTMLElement";
 
 export class Commander {
   public element: HTMLElement;
@@ -46,6 +47,7 @@ export class Commander {
 
     console.log('handling event', event.detail);
 
-    this._messagePipe.handleEvent(event, { elementWalker: this._elementWalker});
+    const activeElement = isHTMLElement(document.activeElement) ? document.activeElement : null;
+    this._messagePipe.handleEvent(event, { elementWalker: this._elementWalker, activeElement });
   }
 }

@@ -47,6 +47,7 @@ export type Pipe = {
 
 export interface FocusKitEventHandlerState {
   elementWalker: HTMLElementWalker;
+  activeElement: HTMLElement | null;
 }
 
 type EventTypes = 'move' | 'init' | 'focuselement' | 'enabletrapgroup' | 'disabletrapgroup';

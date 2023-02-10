@@ -12,13 +12,12 @@ export const moveNext: FocusKitEventHandler = (event, state, next) => {
   }
 
   const target = event.target;
-  const activeElement = document.activeElement;
+  const { activeElement, elementWalker } = state;
   if (!isHTMLElement(target) || !isHTMLElement(activeElement) || !target.contains(activeElement)) {
     next();
     return
   }
 
-  const elementWalker = state.elementWalker;
   elementWalker.currentElement = activeElement;
   elementWalker.filter = currentEntityFocusable(target);
   const nextFocused = elementWalker.nextElement();

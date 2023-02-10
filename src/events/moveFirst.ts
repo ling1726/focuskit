@@ -11,14 +11,13 @@ export const moveFirst: FocusKitEventHandler = (event, state, next) => {
     return;
   }
 
+  const { activeElement, elementWalker } = state;
   const target = event.target;
-  const activeElement = document.activeElement;
   if (!isHTMLElement(target) || !isHTMLElement(activeElement) || !target.contains(activeElement)) {
     next();
     return
   }
 
-  const elementWalker = state.elementWalker;
   elementWalker.currentElement = target.firstElementChild as HTMLElement;
   const filter = currentEntityFocusable(target);
   elementWalker.filter = filter;
