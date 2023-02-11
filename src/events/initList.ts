@@ -1,9 +1,9 @@
-import { LIST, INIT_EVENT } from "../constants";
+import { LIST } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
 import { makeTabbable } from "../utils/makeTabbable";
-import { allFocusable, currentEntityFocusable } from "../utils/nodeFilters";
+import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isInitEvent } from "./assertions/isInitEvent";
 
 export const initList: FocusKitEventHandler = (event, state, next) => {
