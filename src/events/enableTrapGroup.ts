@@ -2,7 +2,7 @@ import { TRAPGROUP } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeTabbable } from "../utils/makeTabbable";
-import { allFocusable } from "../utils/nodeFilters";
+import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isEnableTrapGroupEvent } from "./assertions/isEnableTrapGroupEvent";
 
 export const enableTrapGroup: FocusKitEventHandler = (event, state, next) => {
@@ -19,7 +19,7 @@ export const enableTrapGroup: FocusKitEventHandler = (event, state, next) => {
 
   const elementWalker = state.elementWalker;
   elementWalker.currentElement = target;
-  elementWalker.filter = allFocusable;
+  elementWalker.filter = currentEntityFocusable(target);
 
   let cur: HTMLElement | null = target;
 

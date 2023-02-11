@@ -1,5 +1,5 @@
-import { FOCUSKIT_EVENT } from "../constants";
-import { EntityId, FocusElementEvent } from "../types";
+import { FOCUSKIT_EVENT, TRAPGROUP } from "../constants";
+import { DisableTrapGroupEvent, EnableTrapGroupEvent, EntityId, FocusElementEvent } from "../types";
 import { isFocusable } from "../utils/isFocusable";
 import { Trap } from "./Trap";
 
@@ -12,6 +12,31 @@ export class TrapGroup extends Trap {
     super(element, options);
 
     this.element.addEventListener('keydown', this._onKeyDown);
+    this.disable();
+  }
+
+  disable() {
+    super.disable();
+    const detail: DisableTrapGroupEvent = {
+      entity: TRAPGROUP,
+      id: this.id,
+      type: 'disabletrapgroup',
+    }
+    const event = new CustomEvent<DisableTrapGroupEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+
+    this.element.dispatchEvent(event);
+  }
+
+  enable() {
+    super.enable();
+    const detail: EnableTrapGroupEvent= {
+      entity: TRAPGROUP,
+      id: this.id,
+      type: 'enabletrapgroup',
+    }
+    const event = new CustomEvent<EnableTrapGroupEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+
+    this.element.dispatchEvent(event);
   }
 
   private _onKeyDown = (e: KeyboardEvent) => {

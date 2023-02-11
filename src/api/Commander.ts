@@ -12,6 +12,8 @@ import { focusFirst } from "../events/focusFirst";
 import { focusLast } from "../events/focusLast";
 import { focusTarget } from "../events/focusTarget";
 import { isHTMLElement } from "../utils/isHTMLElement";
+import { enableTrapGroup } from "../events/enableTrapGroup";
+import { disableTrapGroup } from "../events/disableTrapGroup";
 
 export class Commander {
   public element: HTMLElement;
@@ -34,6 +36,8 @@ export class Commander {
     this._messagePipe.use(focusFirst);
     this._messagePipe.use(focusLast);
     this._messagePipe.use(focusTarget);
+    this._messagePipe.use(enableTrapGroup);
+    this._messagePipe.use(disableTrapGroup);
   }
 
   private _handleEvent = (event: Event) => {

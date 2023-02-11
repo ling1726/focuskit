@@ -91,7 +91,9 @@ export class List implements IList {
       return;
     }
 
-    this._keyHandlers[e.key](e);
-    e.preventDefault();
+    if (e.key in this._keyHandlers) {
+      this._keyHandlers[e.key](e);
+      e.preventDefault();
+    }
   }
 }
