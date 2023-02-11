@@ -15,12 +15,12 @@ export class TrapGroup extends Trap {
   }
 
   private _onKeyDown = (e: KeyboardEvent) => {
-    if (e.target !== this.element) {
-      return;
-    }
-
     switch(e.key) {
       case 'Enter':
+        if (e.target !== e.currentTarget) {
+          return;
+        }
+
         this.enable();
         this._focusWithStrategy('first');
         break;

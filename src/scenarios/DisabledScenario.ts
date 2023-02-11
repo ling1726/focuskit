@@ -1,4 +1,4 @@
-import { ArrowZone } from '../api/ArrowZone';
+import { List } from '../api/List';
 import { Commander } from '../api/Commander';
 import { Disabled } from '../api/Disabled';
 
@@ -20,7 +20,7 @@ export default function () {
   const disabled = document.getElementById('disabled') as HTMLElement;
   new Commander(document.body);
   new Disabled(disabled, { id: 'disabled' });
-  new ArrowZone(container, { id: 'test' });
+  new List(container, { id: 'test' });
 
 }
 

@@ -1,4 +1,4 @@
-import { ArrowZone } from '../api/ArrowZone';
+import { List } from '../api/List';
 import { Commander } from '../api/Commander';
 
 export default function () {
@@ -15,7 +15,7 @@ export default function () {
 
   const container = document.getElementById('container') as HTMLElement;
   new Commander(document.body);
-  new ArrowZone(container, { id: 'test' });
+  new List(container, { id: 'test' });
 
 }
 

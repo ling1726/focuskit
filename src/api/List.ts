@@ -1,15 +1,15 @@
-import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
-import { ArrowZone as IArrowZone, InitEvent, EntityId, ArrowZoneOptions, MoveEvent } from "../types";
+import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUSKIT_EVENT, FOCUS_KIT_ATTR, LIST } from "../constants";
+import { List as IList, InitEvent, EntityId, ListOptions, MoveEvent } from "../types";
 import { isClosestEntity } from "../utils/isClosestEntity";
 import { isHTMLElement } from "../utils/isHTMLElement";
 
-export class ArrowZone implements IArrowZone {
+export class List implements IList {
   element: HTMLElement;
   id: EntityId;
 
   private _resetOnBlur: boolean;
 
-  constructor(element: HTMLElement, options: ArrowZoneOptions) {
+  constructor(element: HTMLElement, options: ListOptions) {
     const { id, resetOnBlur } = options;
 
     this.element = element;
@@ -35,7 +35,7 @@ export class ArrowZone implements IArrowZone {
 
   private _resetTabIndexes() {
     const detail: InitEvent = {
-      entity: 'arrowzone',
+      entity: LIST,
       id: this.id,
       type: 'init',
     }
@@ -46,7 +46,7 @@ export class ArrowZone implements IArrowZone {
 
   private _focus(direction: MoveEvent['direction']) {
     const detail: MoveEvent = {
-      entity: 'arrowzone',
+      entity: LIST,
       id: this.id,
       type: 'move',
       direction,

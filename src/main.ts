@@ -1,6 +1,6 @@
 import './style.css'
 
-import ArrowZoneScenario  from "./scenarios/ArrowZoneScenario";
+import ListScenario  from "./scenarios/ListScenario";
 import TrapScenario from "./scenarios/TrapAcenario";
 import DisabledScenario from './scenarios/DisabledScenario';
 import TrapGroupScenario from './scenarios/TrapGroupScenario';

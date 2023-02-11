@@ -1,4 +1,4 @@
-import { ArrowZone } from '../api/ArrowZone';
+import { List } from '../api/List';
 import { Commander } from '../api/Commander';
 import { TrapGroup } from '../api/TrapGroup';
 
@@ -20,7 +20,7 @@ export default function () {
   const trapgroup = document.getElementById('trapgroup') as HTMLElement;
   new Commander(document.body);
   new TrapGroup(trapgroup, { id: 'trapgroup' });
-  new ArrowZone(container, { id: 'test' });
+  new List(container, { id: 'test' });
 
 }
 

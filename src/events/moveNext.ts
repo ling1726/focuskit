@@ -1,4 +1,4 @@
-import { ARROWZONE, DIRECTION_NEXT } from "../constants";
+import { LIST, DIRECTION_NEXT } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { focusNext } from "../utils/focusNext";
 import { isHTMLElement } from "../utils/isHTMLElement";
@@ -6,7 +6,7 @@ import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
 export const moveNext: FocusKitEventHandler = (event, state, next) => {
-  if (!isMoveEvent(event) || event.detail.entity !== ARROWZONE || event.detail.direction !== DIRECTION_NEXT) {
+  if (!isMoveEvent(event) || event.detail.entity !== LIST || event.detail.direction !== DIRECTION_NEXT) {
     next();
     return;
   }

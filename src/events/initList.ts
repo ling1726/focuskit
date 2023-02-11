@@ -1,4 +1,4 @@
-import { ARROWZONE, INIT_EVENT } from "../constants";
+import { LIST, INIT_EVENT } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
@@ -6,8 +6,8 @@ import { makeTabbable } from "../utils/makeTabbable";
 import { allFocusable, currentEntityFocusable } from "../utils/nodeFilters";
 import { isInitEvent } from "./assertions/isInitEvent";
 
-export const initArrowZone: FocusKitEventHandler = (event, state, next) => {
-  if (!isInitEvent(event) || event.detail.entity !== ARROWZONE) {
+export const initList: FocusKitEventHandler = (event, state, next) => {
+  if (!isInitEvent(event) || event.detail.entity !== LIST) {
     next();
     return;
   }

@@ -3,7 +3,7 @@ import { createPipe } from "../utils/createPipe";
 import { Pipe } from "../types";
 import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isFocusKitEvent } from "../utils/isFocusKitEvent";
-import { initArrowZone } from "../events/initArrowZone";
+import { initList } from "../events/initList";
 import { moveNext } from "../events/moveNext";
 import { movePrev } from "../events/movePrev";
 import { moveFirst } from "../events/moveFirst";
@@ -26,7 +26,7 @@ export class Commander {
     this.element.addEventListener(FOCUSKIT_EVENT, this._handleEvent);
 
     this._messagePipe = createPipe();
-    this._messagePipe.use(initArrowZone);
+    this._messagePipe.use(initList);
     this._messagePipe.use(moveNext);
     this._messagePipe.use(movePrev);
     this._messagePipe.use(moveFirst);

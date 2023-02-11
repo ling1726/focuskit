@@ -25,14 +25,14 @@ export type HTMLElementFilter = (element: HTMLElement) => number;
 
 export type TabAreaId = number | string;
 export type EntityId = number | string;
-export type EntityType = 'arrowzone' | 'trap' | 'trapgroup';
+export type EntityType = 'list' | 'trap' | 'trapgroup';
 
-export interface ArrowZoneOptions {
+export interface ListOptions {
   id: EntityId;
   resetOnBlur?: boolean;
 }
 
-export interface ArrowZone {
+export interface List {
   element: HTMLElement;
   id: EntityId;
 }
