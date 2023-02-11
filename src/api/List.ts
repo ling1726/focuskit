@@ -1,4 +1,4 @@
-import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUSKIT_EVENT, FOCUS_KIT_ATTR, LIST } from "../constants";
+import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUS_KIT_ATTR, LIST } from "../constants";
 import { List as IList, InitEvent, EntityId, ListOptions, MoveEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isClosestEntity } from "../utils/isClosestEntity";

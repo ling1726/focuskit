@@ -1,10 +1,7 @@
-import { FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
+import { FOCUS_KIT_ATTR } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
-import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isHTMLElement } from "../utils/isHTMLElement";
-import { allFocusable } from "../utils/nodeFilters";
-import { isAfter, isBefore } from "../utils/nodePosition";
 
 const guardStyles = {
   width: '1px',

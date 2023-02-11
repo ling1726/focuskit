@@ -1,4 +1,4 @@
-import { FOCUSKIT_EVENT, TRAPGROUP } from "../constants";
+import { TRAPGROUP } from "../constants";
 import { DisableTrapGroupEvent, EnableTrapGroupEvent, EntityId, FocusElementEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isFocusable } from "../utils/isFocusable";
