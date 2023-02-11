@@ -30,6 +30,7 @@ export type EntityType = 'list' | 'trap' | 'trapgroup';
 export interface ListOptions {
   id: EntityId;
   resetOnBlur?: boolean;
+  axis?: 'horizontal' | 'vertical' | 'both';
 }
 
 export interface List {

@@ -8,17 +8,42 @@ export class List implements IList {
   id: EntityId;
 
   private _resetOnBlur: boolean;
+  private _axis: 'horizontal' | 'vertical' | 'both';
+  private _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
 
   constructor(element: HTMLElement, options: ListOptions) {
-    const { id, resetOnBlur } = options;
+    const { id, resetOnBlur, axis = 'both' } = options;
 
     this.element = element;
+    this._axis = axis;
     this._resetOnBlur = !!resetOnBlur;
     this.id = id;
     this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
     this.element.addEventListener('keydown', this._onKeyDown);
     this.element.addEventListener('focusout', this._onFocusOut);
+    this._registerKeys();
     this._resetTabIndexes();
+  }
+
+  private _registerKeys() {
+    this._keyHandlers['ArrowUp'] = () => this._focus(DIRECTION_PREV);
+    this._keyHandlers['ArrowDown'] = () => this._focus(DIRECTION_NEXT);
+    this._keyHandlers['ArrowLeft'] = () => this._focus(DIRECTION_PREV);
+    this._keyHandlers['ArrowRight'] = () => this._focus(DIRECTION_NEXT);
+    this._keyHandlers['Home'] = () => this._focus(DIRECTION_FIRST);
+    this._keyHandlers['End'] = () => this._focus(DIRECTION_LAST);
+
+    switch (this._axis) {
+      case "horizontal":
+        delete this._keyHandlers['ArrowUp'];
+        delete this._keyHandlers['ArrowDown'];
+        break;
+      case "vertical":
+        delete this._keyHandlers['ArrowLeft'];
+        delete this._keyHandlers['ArrowRight'];
+        break;
+      default:
+    }
   }
 
   private _onFocusOut = (e: FocusEvent) => {
@@ -62,41 +87,11 @@ export class List implements IList {
       return;
     }
 
-    switch (e.key) {
-      case 'ArrowUp':
-      case 'ArrowLeft':
-      case 'ArrowDown':
-      case 'ArrowRight':
-      case 'Home':
-      case 'End':
-        break;
-      default:
-        return;
-    }
-
     if (!isClosestEntity(this.element, e.target)) {
       return;
     }
 
+    this._keyHandlers[e.key](e);
     e.preventDefault();
-
-    switch (e.key) {
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        this._focus(DIRECTION_PREV);
-        break;
-      case 'ArrowDown':
-      case 'ArrowRight':
-        this._focus(DIRECTION_NEXT);
-        break;
-      case 'Home':
-        this._focus(DIRECTION_FIRST);
-        break;
-      case 'End':
-        this._focus(DIRECTION_LAST);
-        break;
-      default:
-        return;
-    }
   }
 }
