@@ -1,5 +1,6 @@
 import { FOCUSKIT_EVENT, TRAPGROUP } from "../constants";
 import { DisableTrapGroupEvent, EnableTrapGroupEvent, EntityId, FocusElementEvent } from "../types";
+import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isFocusable } from "../utils/isFocusable";
 import { Trap } from "./Trap";
 
@@ -22,7 +23,7 @@ export class TrapGroup extends Trap {
       id: this.id,
       type: 'disabletrapgroup',
     }
-    const event = new CustomEvent<DisableTrapGroupEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+    const event = createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }
@@ -34,7 +35,7 @@ export class TrapGroup extends Trap {
       id: this.id,
       type: 'enabletrapgroup',
     }
-    const event = new CustomEvent<EnableTrapGroupEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+    const event = createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }
@@ -62,7 +63,7 @@ export class TrapGroup extends Trap {
       type: 'focuselement',
       target: this.element,
     }
-    const event = new CustomEvent<FocusElementEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+    const event = createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }

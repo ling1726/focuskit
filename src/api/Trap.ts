@@ -1,5 +1,6 @@
 import { FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
+import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { allFocusable } from "../utils/nodeFilters";
@@ -111,7 +112,7 @@ export class Trap {
       type: 'focuselement',
       strategy,
     }
-    const event = new CustomEvent<FocusElementEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+    const event = createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }
@@ -128,7 +129,7 @@ export class Trap {
       type: 'focuselement',
       target: this._lastFocused,
     }
-    const event = new CustomEvent<FocusElementEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+    const event = createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }

@@ -1,5 +1,6 @@
 import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUSKIT_EVENT, FOCUS_KIT_ATTR, LIST } from "../constants";
 import { List as IList, InitEvent, EntityId, ListOptions, MoveEvent } from "../types";
+import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isClosestEntity } from "../utils/isClosestEntity";
 import { isHTMLElement } from "../utils/isHTMLElement";
 
@@ -64,8 +65,8 @@ export class List implements IList {
       id: this.id,
       type: 'init',
     }
-    const event = new CustomEvent<InitEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
 
+    const event = createFocusKitEvent(detail);
     this.element.dispatchEvent(event);
   }
 
@@ -77,7 +78,7 @@ export class List implements IList {
       direction,
     }
 
-    const event = new CustomEvent<MoveEvent>(FOCUSKIT_EVENT, { detail, bubbles: true, cancelable: true });
+    const event = createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }
