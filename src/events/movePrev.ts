@@ -1,6 +1,5 @@
 import { LIST, DIRECTION_PREV  } from "../constants";
 import { FocusKitEventHandler } from "../types";
-import { focusNext } from "../utils/focusNext";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
@@ -31,6 +30,5 @@ export const movePrev: FocusKitEventHandler = (event, state, next) => {
       : elementWalker.previousElement();
   }
 
-
-  focusNext(activeElement, nextFocused);
+  nextFocused?.focus();
 }

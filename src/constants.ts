@@ -1,6 +1,7 @@
 export const FOCUSKIT_EVENT = 'focuskit';
 export const INIT_EVENT = 'init';
 export const MOVE_EVENT = 'move';
+export const UPDATE_TABINDEX_EVENT = 'updatetabindex';
 export const DIRECTION_NEXT = 'next';
 export const DIRECTION_PREV = 'prev';
 export const DIRECTION_FIRST = 'first';

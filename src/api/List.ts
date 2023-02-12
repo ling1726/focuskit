@@ -1,5 +1,5 @@
-import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST } from "../constants";
-import { List as IList, InitEvent, ListOptions, MoveEvent } from "../types";
+import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST, UPDATE_TABINDEX_EVENT } from "../constants";
+import { List as IList, InitEvent, ListOptions, MoveEvent, UpdateTabIndexEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isClosestEntity } from "../utils/isClosestEntity";
 import { isHTMLElement } from "../utils/isHTMLElement";
@@ -20,6 +20,7 @@ export class List extends Base implements IList  {
     this.id = id;
     this.element.addEventListener('keydown', this._onKeyDown);
     this.element.addEventListener('focusout', this._onFocusOut);
+    this.element.addEventListener('focusin', this._onFocusIn);
     this._registerKeys();
     this._resetTabIndexes();
   }
@@ -94,5 +95,27 @@ export class List extends Base implements IList  {
       this._keyHandlers[e.key](e);
       e.preventDefault();
     }
+  }
+
+  private _onFocusIn = (e: FocusEvent) => {
+    const { target, relatedTarget } = e ;
+
+    if (!isClosestEntity(this.element, target)) {
+      return;
+    }
+
+    if (!isHTMLElement(target) || !isHTMLElement(relatedTarget)) {
+      return;
+    }
+
+    const detail: UpdateTabIndexEvent = {
+      entity: LIST,
+      id: this.id,
+      prev: relatedTarget,
+      type: UPDATE_TABINDEX_EVENT,
+    }
+
+    const event = createFocusKitEvent(detail);
+    this.element.dispatchEvent(event);
   }
 }

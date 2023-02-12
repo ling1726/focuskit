@@ -51,7 +51,7 @@ export interface FocusKitEventHandlerState {
   activeElement: HTMLElement | null;
 }
 
-type EventTypes = 'move' | 'init' | 'focuselement' | 'enabletrapgroup' | 'disabletrapgroup';
+type EventTypes = 'move' | 'init' | 'focuselement' | 'enabletrapgroup' | 'disabletrapgroup' | 'updatetabindex';
 
 export interface BaseEvent<TEventType extends EventTypes = EventTypes> {
   id: EntityId;
@@ -61,6 +61,10 @@ export interface BaseEvent<TEventType extends EventTypes = EventTypes> {
 
 export interface MoveEvent extends BaseEvent<'move'> {
   direction: 'next' | 'prev' | 'first' | 'last';
+}
+
+export interface UpdateTabIndexEvent extends BaseEvent<'updatetabindex'> {
+  prev: HTMLElement;
 }
 
 export interface InitEvent extends BaseEvent<'init'> { }

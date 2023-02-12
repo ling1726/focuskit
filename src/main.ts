@@ -7,3 +7,5 @@ import TrapGroupScenario from './scenarios/TrapGroupScenario';
 import NestedListTrapGroup from './scenarios/x';
 import ListTrapGroup from './scenarios/ListTrapGroup';
 import ArrowZoneScenario from './scenarios/ArrowZoneScenario';
+
+// ArrowZoneScenario(document.getElementById('app') as HTMLElement);

@@ -1,6 +1,5 @@
 import { LIST, DIRECTION_NEXT } from "../constants";
 import { FocusKitEventHandler } from "../types";
-import { focusNext } from "../utils/focusNext";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
@@ -23,9 +22,9 @@ export const moveNext: FocusKitEventHandler = (event, state, next) => {
   const nextFocused = elementWalker.nextElement();
 
   if (nextFocused) {
-    focusNext(activeElement, nextFocused);
+    nextFocused.focus();
   } else {
     elementWalker.currentElement = target;
-    focusNext(activeElement, elementWalker.nextElement())
+    elementWalker.nextElement()?.focus();
   }
 }
