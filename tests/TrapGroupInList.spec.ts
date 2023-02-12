@@ -46,10 +46,10 @@ test('should not move focus into TrapGroup with arrow keys', async ({ page }) =>
   await page.keyboard.press('Tab');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowDown');
-  expect(await focuskitPage.activeElementId()).toBe('group');
+  await focuskitPage.waitForActiveElement('group');
 
   await page.keyboard.press('ArrowDown');
-  expect(await focuskitPage.activeElementId()).toBe('after-group')
+  await focuskitPage.waitForActiveElement('after-group');
 });
 
 
@@ -76,10 +76,10 @@ test('should not move focus out TrapGroup with arrow keys', async ({ page }) => 
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
-  expect(await focuskitPage.activeElementId()).toBe('group-1')
+  await focuskitPage.waitForActiveElement('group-1');
 
   await page.keyboard.press('ArrowDown');
-  expect(await focuskitPage.activeElementId()).toBe('group-1')
+  await focuskitPage.waitForActiveElement('group-1');
 });
 
 test('should not trap focus in TrapGroup', async ({ page }) => {
@@ -105,12 +105,12 @@ test('should not trap focus in TrapGroup', async ({ page }) => {
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
-  expect(await focuskitPage.activeElementId()).toBe('group-1')
+  await focuskitPage.waitForActiveElement('group-1');
 
   await page.keyboard.press('Tab');
-  expect(await focuskitPage.activeElementId()).toBe('group-2')
+  await focuskitPage.waitForActiveElement('group-2');
   await page.keyboard.press('Tab');
-  expect(await focuskitPage.activeElementId()).toBe('group-1')
+  await focuskitPage.waitForActiveElement('group-1');
 });
 
 test('should continue with List after Escape from TrapGroup', async ({ page }) => {
@@ -136,14 +136,14 @@ test('should continue with List after Escape from TrapGroup', async ({ page }) =
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
-  expect(await focuskitPage.activeElementId()).toBe('group-1')
+  await focuskitPage.waitForActiveElement('group-1');
 
   page.keyboard.press('Escape');
-  expect(await focuskitPage.activeElementId()).toBe('group');
+  await focuskitPage.waitForActiveElement('group');
 
   page.keyboard.press('ArrowDown');
-  expect(await focuskitPage.activeElementId()).toBe('after-group');
+  await focuskitPage.waitForActiveElement('after-group');
 
   page.keyboard.press('ArrowUp');
-  expect(await focuskitPage.activeElementId()).toBe('group');
+  await focuskitPage.waitForActiveElement('group');
 });

@@ -23,7 +23,7 @@ test('should only have one tabindex="0" element', async ({ page }) => {
   await focuskitPage.createList('list');
   await page.keyboard.press('Tab');
 
-  expect(await focuskitPage.activeElementId()).toBe('one');
+  await focuskitPage.waitForActiveElement('one');
 
   const focusableElementIds = await focuskitPage.focusableElementIds()
   const tabbableElementIds = await focuskitPage.tabbableElementIds();
@@ -55,7 +55,7 @@ test('should change focused element with arrow', async ({ page }) => {
   await page.keyboard.press('Tab');
 
   await page.keyboard.press('ArrowDown');
-  expect(await focuskitPage.activeElementId()).toBe('two');
+  await focuskitPage.waitForActiveElement('two');
 
   let focusableElementIds = await focuskitPage.focusableElementIds()
   let tabbableElementIds = await focuskitPage.tabbableElementIds();
@@ -63,7 +63,7 @@ test('should change focused element with arrow', async ({ page }) => {
   expect(tabbableElementIds.length).toBe(1)
 
   await page.keyboard.press('ArrowUp');
-  expect(await focuskitPage.activeElementId()).toBe('one');
+  await focuskitPage.waitForActiveElement('one');
 
   focusableElementIds = await focuskitPage.focusableElementIds()
   tabbableElementIds = await focuskitPage.tabbableElementIds();
@@ -93,9 +93,9 @@ test('should do circular navigation', async ({ page }) => {
   await page.keyboard.press('Tab');
 
   await page.keyboard.press('ArrowUp');
-  expect(await focuskitPage.activeElementId()).toBe('six');
+  await focuskitPage.waitForActiveElement('six');
 
   await page.keyboard.press('ArrowDown');
-  expect(await focuskitPage.activeElementId()).toBe('one');
+  await focuskitPage.waitForActiveElement('one');
 })
 

@@ -39,10 +39,8 @@ export class FocusKitPage {
     return this.page.focus(`#${id}`);
   }
 
-  activeElementId() {
-    return this.page.evaluate(() => {
-      return document.activeElement?.id;
-    });
+  waitForActiveElement(id: string) {
+    return this.page.waitForFunction((id) => document.activeElement?.id === id, id);
   }
 
   tabIndex(id: string) {
