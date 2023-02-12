@@ -108,6 +108,10 @@ export class List extends Base implements IList  {
       return;
     }
 
+    if (!this.element.contains(relatedTarget)) {
+      return;
+    }
+
     const detail: UpdateTabIndexEvent = {
       entity: LIST,
       id: this.id,

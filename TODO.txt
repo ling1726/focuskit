@@ -1,4 +1,5 @@
-- Trap: sentinels in trap
+- ListGroup
 - List: handle RTL
-- List: decouple tabindex setting vs focusing
 - Connect Tabbable areas
+- handle shift tab in tests;
+- implement waitForActiveElement(id)

@@ -46,9 +46,9 @@ export class FocusKitPage {
   }
 
   tabIndex(id: string) {
-    return this.page.evaluate(() => {
+    return this.page.evaluate((id) => {
       return document.getElementById(id)?.tabIndex;
-    });
+    }, id);
   }
 
   focusableElementIds() {
