@@ -1,7 +1,7 @@
-import { FOCUS_KIT_ATTR } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isHTMLElement } from "../utils/isHTMLElement";
+import { Base } from "./Base";
 
 const guardStyles = {
   width: '1px',
@@ -14,10 +14,8 @@ const guardStyles = {
 };
 
 
-export class Trap {
-  public element: HTMLElement;
-  public id: EntityId;
-  public active: boolean = false;
+export class Trap extends Base {
+  active: boolean = false;
 
   private _lastFocused: HTMLElement;
   private _pre: HTMLElement;
@@ -25,10 +23,9 @@ export class Trap {
 
   constructor(element: HTMLElement, options: { id: EntityId }) {
     const { id } = options;
-    this.element = element
-    this.id = id;
+    super(element, { id });
+
     this.element.addEventListener('focusin', this._onFocusIn, true);
-    this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
     this._pre = this._createGuard();
     this._post = this._createGuard();
     this._lastFocused = this.element;

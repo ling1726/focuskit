@@ -1,25 +1,23 @@
-import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, FOCUS_KIT_ATTR, LIST } from "../constants";
-import { List as IList, InitEvent, EntityId, ListOptions, MoveEvent } from "../types";
+import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST } from "../constants";
+import { List as IList, InitEvent, ListOptions, MoveEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isClosestEntity } from "../utils/isClosestEntity";
 import { isHTMLElement } from "../utils/isHTMLElement";
+import { Base } from "./Base";
 
-export class List implements IList {
-  element: HTMLElement;
-  id: EntityId;
-
+export class List extends Base implements IList  {
   private _resetOnBlur: boolean;
   private _axis: 'horizontal' | 'vertical' | 'both';
   private _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
 
   constructor(element: HTMLElement, options: ListOptions) {
     const { id, resetOnBlur, axis = 'both' } = options;
+    super(element, { id });
 
     this.element = element;
     this._axis = axis;
     this._resetOnBlur = !!resetOnBlur;
     this.id = id;
-    this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
     this.element.addEventListener('keydown', this._onKeyDown);
     this.element.addEventListener('focusout', this._onFocusOut);
     this._registerKeys();
