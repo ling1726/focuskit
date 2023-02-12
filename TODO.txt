@@ -1,5 +1,8 @@
-- ListGroup
-- List: handle RTL
-- Connect Tabbable areas
+- test TrapGroup in ListGroup
+- test List in TrapGroup
+- test ListGroup in TrapGroup
+- short circuit based on isClosestEntity
+- List: handle RTL -> use pipe state
+- Connect Traps
 - handle shift tab in tests;
 - implement waitForActiveElement(id)
