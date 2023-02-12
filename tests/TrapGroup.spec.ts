@@ -20,13 +20,9 @@ test('should not tab into contents', async ({ page }) => {
   await page.keyboard.press('Tab');
   await focuskitPage.waitForActiveElement('group');
   await page.keyboard.press('Tab');
-  // TODO uncomment this
-  // await focuskitPage.waitForActiveElement('');
+  await focuskitPage.waitForActiveElement('');
 
-  const focusableElementIds = await focuskitPage.focusableElementIds();
-  expect(focusableElementIds.length).toBe(2);
-  expect(focusableElementIds[0]).toBe('one');
-  expect(focusableElementIds[1]).toBe('two');
+  await focuskitPage.waitForTabIndexes(['one', 'two'], -1);
 });
 
 test('should focus first item on Enter', async ({ page }) => {
@@ -96,4 +92,5 @@ test('should focus group parent on Escape', async ({ page }) => {
   await focuskitPage.waitForActiveElement('one');
   await page.keyboard.press('Escape');
   await focuskitPage.waitForActiveElement('group');
+  await focuskitPage.waitForTabIndex('group', 0);
 });

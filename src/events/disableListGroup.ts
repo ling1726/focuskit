@@ -1,13 +1,13 @@
-import { LIST } from "../constants";
+import { LISTGROUP } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
 import { makeTabbable } from "../utils/makeTabbable";
 import { currentEntityFocusable } from "../utils/nodeFilters";
-import { isInitEvent } from "./assertions/isInitEvent";
+import { isDisableListGroupEvent } from "./assertions/isDisableListGroupEvent";
 
-export const initList: FocusKitEventHandler = (event, state, next) => {
-  if (!isInitEvent(event) || event.detail.entity !== LIST) {
+export const disableListGroup: FocusKitEventHandler = (event, state, next) => {
+  if (!isDisableListGroupEvent(event) || event.detail.entity !== LISTGROUP) {
     next();
     return;
   }
@@ -22,11 +22,7 @@ export const initList: FocusKitEventHandler = (event, state, next) => {
   elementWalker.currentElement = target;
   elementWalker.filter = currentEntityFocusable(target);
 
-  let cur: HTMLElement | null = elementWalker.nextElement();
-
-  if (cur) {
-    makeTabbable(cur)
-  }
+  let cur: HTMLElement | null = target;
 
   while (cur = elementWalker.nextElement()) {
     if (!(cur instanceof HTMLElement)) {
@@ -35,6 +31,8 @@ export const initList: FocusKitEventHandler = (event, state, next) => {
 
     makeFocusable(cur);
   }
+
+  makeTabbable(target);
 
   next();
 }

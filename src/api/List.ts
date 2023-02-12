@@ -1,5 +1,5 @@
 import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST, UPDATE_TABINDEX_EVENT } from "../constants";
-import { List as IList, InitEvent, ListOptions, MoveEvent, UpdateTabIndexEvent } from "../types";
+import { List as IList, ResetTabIndexesEvent, ListOptions, MoveEvent, UpdateTabIndexEvent, DefaultTabbable } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isClosestEntity } from "../utils/isClosestEntity";
 import { isHTMLElement } from "../utils/isHTMLElement";
@@ -8,13 +8,15 @@ import { Base } from "./Base";
 export class List extends Base implements IList  {
   private _resetOnBlur: boolean;
   private _axis: 'horizontal' | 'vertical' | 'both';
-  private _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
+  protected _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
+  private _defaultTabbable: DefaultTabbable;
 
   constructor(element: HTMLElement, options: ListOptions) {
-    const { id, resetOnBlur, axis = 'both' } = options;
+    const { id, resetOnBlur, axis = 'both', defaultTabbable = 'first' } = options;
     super(element, { id });
 
     this.element = element;
+    this._defaultTabbable = defaultTabbable;
     this._axis = axis;
     this._resetOnBlur = !!resetOnBlur;
     this.id = id;
@@ -59,10 +61,11 @@ export class List extends Base implements IList  {
   }
 
   private _resetTabIndexes() {
-    const detail: InitEvent = {
+    const detail: ResetTabIndexesEvent = {
       entity: LIST,
       id: this.id,
-      type: 'init',
+      type: 'resettabindexes',
+      defaultTabbable: this._defaultTabbable,
     }
 
     const event = createFocusKitEvent(detail);
@@ -82,7 +85,7 @@ export class List extends Base implements IList  {
     this.element.dispatchEvent(event);
   }
 
-  private _onKeyDown = (e: KeyboardEvent) => {
+  protected _onKeyDown = (e: KeyboardEvent) => {
     if (e.defaultPrevented) {
       return;
     }

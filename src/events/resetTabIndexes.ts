@@ -1,18 +1,17 @@
-import { TRAPGROUP } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
 import { makeTabbable } from "../utils/makeTabbable";
 import { currentEntityFocusable } from "../utils/nodeFilters";
-import { isDisableTrapGroupEvent } from "./assertions/isDisableTrapGroupEvent";
+import { isResetTabIndexesEvent } from "./assertions/isResetTabIndexesEvent";
 
-export const disableTrapGroup: FocusKitEventHandler = (event, state, next) => {
-  if (!isDisableTrapGroupEvent(event) || event.detail.entity !== TRAPGROUP) {
+export const initList: FocusKitEventHandler = (event, state, next) => {
+  if (!isResetTabIndexesEvent(event)) {
     next();
     return;
   }
 
-  const target = event.target;
+  const { target, detail: { defaultTabbable }   } = event;
   if (!isHTMLElement(target)) {
     next();
     return
@@ -22,7 +21,15 @@ export const disableTrapGroup: FocusKitEventHandler = (event, state, next) => {
   elementWalker.currentElement = target;
   elementWalker.filter = currentEntityFocusable(target);
 
-  let cur: HTMLElement | null = target;
+  let cur: HTMLElement | null = elementWalker.nextElement();
+
+  if (cur) {
+    if (defaultTabbable === 'first') {
+      makeTabbable(cur);
+    } else {
+      elementWalker.currentElement = target;
+    }
+  }
 
   while (cur = elementWalker.nextElement()) {
     if (!(cur instanceof HTMLElement)) {
@@ -31,9 +38,6 @@ export const disableTrapGroup: FocusKitEventHandler = (event, state, next) => {
 
     makeFocusable(cur);
   }
-
-  // TODO test this
-  makeTabbable(target);
 
   next();
 }

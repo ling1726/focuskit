@@ -18,6 +18,10 @@ export const tabbable: HTMLElementFilter = element => {
 }
 
 export const currentEntityFocusable: (target: HTMLElement) =>  HTMLElementFilter = target => element => {
+  if (target === element) {
+    return NodeFilter.FILTER_SKIP;
+  }
+
   // TODO remove contains, stop should not be here
   if (!isClosestEntity(target, element) || !target.contains(element)) {
     return NodeFilter.FILTER_REJECT;

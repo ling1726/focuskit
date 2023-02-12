@@ -1,8 +1,8 @@
-import { List, Commander, Disabled, Trap, TrapGroup } from './api';
+import { List, Commander, Disabled, Trap, TrapGroup, ListGroup } from './api';
 
-// @ts-ignore
 window.FocusKit = {
   List,
+  ListGroup,
   Commander,
   Disabled,
   Trap,

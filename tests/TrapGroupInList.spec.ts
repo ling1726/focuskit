@@ -1,5 +1,5 @@
 import { html } from 'lit-html';
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { FocusKitPage } from './FocusKitPage.js';
 
 test('should set tabindex="-1" on TrapGroup parent', async ({ page }) => {
@@ -21,7 +21,7 @@ test('should set tabindex="-1" on TrapGroup parent', async ({ page }) => {
 
   await focuskitPage.createList('list');
   await focuskitPage.createTrapGroup('group');
-  await focuskitPage.waifForTabIndex('group', -1);
+  await focuskitPage.waitForTabIndex('group', -1);
 });
 
 test('should not move focus into TrapGroup with arrow keys', async ({ page }) => {

@@ -3,8 +3,6 @@ import { TemplateResult } from "lit-html";
 import { Readable } from 'stream';
 import { render } from '@lit-labs/ssr'
 
-type Key = 'ArrowDown' | 'ArrowUp' | 'Home' | 'End' | 'Tab'
-
 export class FocusKitPage {
   readonly page: Page;
   constructor(page: Page) {
@@ -19,6 +17,13 @@ export class FocusKitPage {
     return this.page.evaluate((id) => {
       const element = document.getElementById(id) as HTMLElement;
       new window.FocusKit.List(element, { id });
+    }, id)
+  }
+
+  createListGroup(id: string) {
+    return this.page.evaluate((id) => {
+      const element = document.getElementById(id) as HTMLElement;
+      new window.FocusKit.ListGroup(element, { id });
     }, id)
   }
 
@@ -39,24 +44,24 @@ export class FocusKitPage {
     return this.page.focus(`#${id}`);
   }
 
-  waitForActiveElement(id: string) {
-    return this.page.waitForFunction((id) => document.activeElement?.id === id, id);
+  waitForActiveElement(id: string, options: { timeout?: number } = {}) {
+    const { timeout = 1000 } = options;
+    return this.page.waitForFunction((id) => document.activeElement?.id === id, id, { timeout });
   }
 
-  waifForTabIndex(id: string, tabIndex: number) {
-    return this.page.waitForFunction(({id, tabIndex}) => document.getElementById(id)?.tabIndex === tabIndex, {id, tabIndex});
+  waitForTabIndex(id: string, tabIndex: number, options: { timeout?: 1000 } = {}) {
+    const { timeout = 1000 } = options;
+    return this.page.waitForFunction(({ id, tabIndex }) => document.getElementById(id)?.tabIndex === tabIndex, { id, tabIndex }, { timeout });
   }
 
-  focusableElementIds() {
-    return this.page.evaluate(() => {
-      return Array.from(document.querySelectorAll('[tabindex="-1"]')).map(el => el.id);
-    });
-  }
+  waitForTabIndexes(ids: string[], tabIndex: number, options: { timeout?: 1000 } = {}) {
+    const { timeout = 1000 } = options;
+    return this.page.waitForFunction(({ ids, tabIndex }) => {
+      return ids.reduce((prev, cur) => {
+        return prev && document.getElementById(cur)?.tabIndex === tabIndex;
+      }, true)
 
-  tabbableElementIds() {
-    return this.page.evaluate(() => {
-      return Array.from(document.querySelectorAll('[tabindex="0"]')).map(el => el.id);
-    });
+    }, { ids, tabIndex }, { timeout });
   }
 
   async render(template: TemplateResult) {

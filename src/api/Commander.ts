@@ -3,7 +3,7 @@ import { createPipe } from "../utils/createPipe";
 import { Pipe } from "../types";
 import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isFocusKitEvent } from "../utils/isFocusKitEvent";
-import { initList } from "../events/initList";
+import { initList } from "../events/resetTabIndexes";
 import { moveNext } from "../events/moveNext";
 import { movePrev } from "../events/movePrev";
 import { moveFirst } from "../events/moveFirst";
@@ -15,6 +15,8 @@ import { isHTMLElement } from "../utils/isHTMLElement";
 import { enableTrapGroup } from "../events/enableTrapGroup";
 import { disableTrapGroup } from "../events/disableTrapGroup";
 import { updateTabIndex } from "../events/updateTabIndex";
+import { enableListGroup } from "../events/enableListGroup";
+import { disableListGroup } from "../events/disableListGroup";
 
 export class Commander {
   public element: HTMLElement;
@@ -40,6 +42,8 @@ export class Commander {
     this._messagePipe.use(enableTrapGroup);
     this._messagePipe.use(disableTrapGroup);
     this._messagePipe.use(updateTabIndex);
+    this._messagePipe.use(enableListGroup);
+    this._messagePipe.use(disableListGroup);
   }
 
   private _handleEvent = (event: Event) => {

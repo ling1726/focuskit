@@ -1,5 +1,5 @@
 import { TRAPGROUP } from "../constants";
-import { DisableTrapGroupEvent, EnableTrapGroupEvent, EntityId, FocusElementEvent } from "../types";
+import { DisableTrapGroupEvent, EnableTrapGroupEvent, EntityId, FocusElementEvent, ResetTabIndexesEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isFocusable } from "../utils/isFocusable";
 import { Trap } from "./Trap";
@@ -13,7 +13,20 @@ export class TrapGroup extends Trap {
     super(element, options);
 
     this.element.addEventListener('keydown', this._onKeyDown);
-    this.disable();
+    this.resetTabIndexes();
+  }
+
+  resetTabIndexes() {
+    const detail: ResetTabIndexesEvent = {
+      entity: TRAPGROUP,
+      id: this.id,
+      type: 'resettabindexes',
+      defaultTabbable: null,
+    }
+    const event = createFocusKitEvent(detail);
+
+    this.element.dispatchEvent(event);
+
   }
 
   disable() {
@@ -30,7 +43,7 @@ export class TrapGroup extends Trap {
 
   enable() {
     super.enable();
-    const detail: EnableTrapGroupEvent= {
+    const detail: EnableTrapGroupEvent = {
       entity: TRAPGROUP,
       id: this.id,
       type: 'enabletrapgroup',
@@ -41,7 +54,7 @@ export class TrapGroup extends Trap {
   }
 
   private _onKeyDown = (e: KeyboardEvent) => {
-    switch(e.key) {
+    switch (e.key) {
       case 'Enter':
         if (e.target !== e.currentTarget) {
           return;
