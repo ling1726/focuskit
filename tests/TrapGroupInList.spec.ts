@@ -21,7 +21,7 @@ test('should set tabindex="-1" on TrapGroup parent', async ({ page }) => {
 
   await focuskitPage.createList('list');
   await focuskitPage.createTrapGroup('group');
-  expect(await focuskitPage.tabIndex('group')).toBe(-1);
+  await focuskitPage.waifForTabIndex('group', -1);
 });
 
 test('should not move focus into TrapGroup with arrow keys', async ({ page }) => {
