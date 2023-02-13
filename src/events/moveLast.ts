@@ -1,11 +1,11 @@
-import { LIST, DIRECTION_LAST } from "../constants";
+import { DIRECTION_LAST } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
 export const moveLast: FocusKitEventHandler = (event, state, next) => {
-  if (!isMoveEvent(event) || event.detail.entity !== LIST || event.detail.direction !== DIRECTION_LAST) {
+  if (!isMoveEvent(event) || event.detail.direction !== DIRECTION_LAST) {
     next();
     return;
   }
