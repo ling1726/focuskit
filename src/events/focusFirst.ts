@@ -16,10 +16,10 @@ export const focusFirst: FocusKitEventHandler = (event, state, next) => {
   }
 
   const elementWalker = state.elementWalker;
-  elementWalker.currentElement = target as HTMLElement;
+  elementWalker.root = target as HTMLElement;
   elementWalker.filter = tabbable;
 
-  const nextFocused = elementWalker.nextElement();
+  const nextFocused = elementWalker.firstChild();
   nextFocused?.focus();
 }
 

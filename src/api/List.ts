@@ -13,7 +13,7 @@ export class List extends Base implements IList  {
 
   constructor(element: HTMLElement, options: ListOptions) {
     const { id, resetOnBlur, axis = 'both', defaultTabbable = 'first' } = options;
-    super(element, { id });
+    super(element, { id, entity: LIST });
 
     this.element = element;
     this._defaultTabbable = defaultTabbable;

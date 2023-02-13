@@ -15,7 +15,7 @@ export class ListGroup extends Base {
 
   constructor(element: HTMLElement, options: ListOptions) {
     const { resetOnBlur, axis = 'both', defaultTabbable = null } = options;
-    super(element, options);
+    super(element, { ...options, entity: LISTGROUP });
 
     this._defaultTabbable = defaultTabbable;
     this._axis = axis;

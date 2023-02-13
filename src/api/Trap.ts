@@ -1,3 +1,4 @@
+import { TRAP } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { creaetFocusGuard } from "../utils/createFocusGuard";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
@@ -13,7 +14,7 @@ export class Trap extends Base {
 
   constructor(element: HTMLElement, options: { id: EntityId }) {
     const { id } = options;
-    super(element, { id });
+    super(element, { id, entity: TRAP });
 
     this.element.addEventListener('focusin', this._onFocusIn, true);
     this._pre = creaetFocusGuard()

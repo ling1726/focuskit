@@ -18,7 +18,7 @@ export class TrapGroup extends Base {
       throw new Error('TrapGroup element must be focusable');
     }
 
-    super(element, options);
+    super(element, { ...options, entity: TRAPGROUP });
 
     this.element.addEventListener('focusin', this._onFocusIn, true);
     this._pre = creaetFocusGuard();

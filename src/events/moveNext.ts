@@ -17,6 +17,7 @@ export const moveNext: FocusKitEventHandler = (event, state, next) => {
     return
   }
 
+  elementWalker.root = target;
   elementWalker.currentElement = activeElement;
   elementWalker.filter = currentEntityFocusable(target);
   const nextFocused = elementWalker.nextElement();

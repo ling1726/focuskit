@@ -19,7 +19,7 @@ export const disableListGroup: FocusKitEventHandler = (event, state, next) => {
   }
 
   const elementWalker = state.elementWalker;
-  elementWalker.currentElement = target;
+  elementWalker.root = target;
   elementWalker.filter = currentEntityFocusable(target);
 
   let cur: HTMLElement | null = target;

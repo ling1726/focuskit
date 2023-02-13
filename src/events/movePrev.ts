@@ -18,16 +18,14 @@ export const movePrev: FocusKitEventHandler = (event, state, next) => {
   }
 
 
+  elementWalker.root = target;
   elementWalker.currentElement = activeElement;
   const filter = currentEntityFocusable(target);
   elementWalker.filter = filter;
   let nextFocused = elementWalker.previousElement()
 
   if (!nextFocused) {
-    elementWalker.currentElement = target.lastElementChild as HTMLElement;
-    nextFocused = filter(elementWalker.currentElement) === NodeFilter.FILTER_ACCEPT
-      ? elementWalker.currentElement
-      : elementWalker.previousElement();
+    nextFocused = elementWalker.lastChild();
   }
 
   nextFocused?.focus();

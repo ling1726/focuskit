@@ -17,13 +17,10 @@ export const moveLast: FocusKitEventHandler = (event, state, next) => {
     return
   }
 
-  elementWalker.currentElement = target.lastElementChild as HTMLElement;
+  elementWalker.currentElement = target;
   const filter = currentEntityFocusable(target);
   elementWalker.filter = filter;
 
-  const nextFocused = filter(elementWalker.currentElement) === NodeFilter.FILTER_ACCEPT
-    ? elementWalker.currentElement
-    : elementWalker.previousElement();
-  
+  const nextFocused = elementWalker.lastChild();
   nextFocused?.focus();
 }

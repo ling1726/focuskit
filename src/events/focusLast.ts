@@ -1,6 +1,6 @@
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
-import { allFocusable, tabbable } from "../utils/nodeFilters";
+import { tabbable } from "../utils/nodeFilters";
 import { isFocusElementEvent } from "./assertions/isFocusElementEvent";
 
 export const focusLast: FocusKitEventHandler = (event, state, next) => {
@@ -16,13 +16,10 @@ export const focusLast: FocusKitEventHandler = (event, state, next) => {
   }
 
   const elementWalker = state.elementWalker;
-  elementWalker.currentElement = target.lastElementChild as HTMLElement;
+  elementWalker.currentElement = target;
   elementWalker.filter = tabbable;
 
-  const nextFocused = allFocusable(elementWalker.currentElement) === NodeFilter.FILTER_ACCEPT
-    ? elementWalker.currentElement
-    : elementWalker.previousElement();
-
+  const nextFocused = elementWalker.lastChild();
   nextFocused?.focus();
 }
 

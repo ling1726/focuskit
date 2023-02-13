@@ -17,14 +17,11 @@ export const moveFirst: FocusKitEventHandler = (event, state, next) => {
     return
   }
 
-  elementWalker.currentElement = target.firstElementChild as HTMLElement;
+  elementWalker.currentElement = target;
   const filter = currentEntityFocusable(target);
   elementWalker.filter = filter;
 
-  const nextFocused = filter(elementWalker.currentElement) === NodeFilter.FILTER_ACCEPT
-    ? elementWalker.currentElement
-    : elementWalker.nextElement();
-  
+  const nextFocused = elementWalker.firstChild();
   nextFocused?.focus();
 }
 

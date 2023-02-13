@@ -8,5 +8,6 @@ export const DIRECTION_FIRST = 'first';
 export const DIRECTION_LAST = 'last';
 export const LIST = 'list';
 export const TRAPGROUP = 'trapgroup';
+export const TRAP = 'trap';
 export const LISTGROUP = 'listgroup';
 export const FOCUS_KIT_ATTR = 'data-focuskit';

@@ -18,7 +18,7 @@ export const enableListGroup: FocusKitEventHandler = (event, state, next) => {
   }
 
   const elementWalker = state.elementWalker;
-  elementWalker.currentElement = target;
+  elementWalker.root = target;
   elementWalker.filter = currentEntityFocusable(target);
 
 
