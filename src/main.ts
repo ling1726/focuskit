@@ -9,4 +9,4 @@ import ArrowZoneScenario from './scenarios/ArrowZoneScenario';
 import ListGroup from './scenarios/ListGroup';
 import ListInTrapGroup from './scenarios/ListInTrapGroup';
 
-// TrapGroupScenario(document.getElementById('app')!);
+TrapGroupScenario(document.getElementById('app')!);

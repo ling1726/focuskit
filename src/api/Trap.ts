@@ -85,7 +85,7 @@ export class Trap extends Base {
 
   protected _focusWithStrategy(strategy: FocusElementEvent['strategy']) {
     const detail: FocusElementEvent = {
-      entity: 'trap',
+      entity: TRAP,
       id: this.id,
       type: 'focuselement',
       strategy,
@@ -102,7 +102,7 @@ export class Trap extends Base {
     }
 
     const detail: FocusElementEvent = {
-      entity: 'trap',
+      entity: TRAP,
       id: this.id,
       type: 'focuselement',
       target: this._lastFocused,

@@ -1,10 +1,13 @@
 import { FOCUS_KIT_ATTR } from "../constants";
 import { EntityId, EntityType } from "../types";
+import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 
 export class Base {
   element: HTMLElement;
   id: EntityId;
   entity: EntityType;
+
+  protected _elementWalker: HTMLElementWalker;
 
   constructor(element: HTMLElement, options: { id: EntityId, entity: EntityType }) {
     const { id, entity } = options;
@@ -13,5 +16,7 @@ export class Base {
     this.id = id;
     this.entity = entity;
     this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
+    this.element._focuskitEntity = entity;
+    this._elementWalker = HTMLElementWalker.getInstance();
   }
 }

@@ -103,7 +103,7 @@ export class TrapGroup extends Base {
 
   private _focusElement() {
     const detail: FocusElementEvent = {
-      entity: 'trap',
+      entity: TRAPGROUP,
       id: this.id,
       type: 'focuselement',
       target: this.element,

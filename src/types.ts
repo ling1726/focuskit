@@ -27,7 +27,7 @@ export type DefaultTabbable = 'first' | HTMLElement | null;
 
 export type TabAreaId = number | string;
 export type EntityId = number | string;
-export type EntityType = 'list' | 'trap' | 'trapgroup' | 'listgroup';
+export type EntityType = 'List' | 'Trap' | 'TrapGroup' | 'ListGroup';
 
 export interface ListOptions {
   id: EntityId;
