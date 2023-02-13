@@ -1,18 +1,8 @@
 import { EntityId, FocusElementEvent } from "../types";
+import { creaetFocusGuard } from "../utils/createFocusGuard";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { Base } from "./Base";
-
-const guardStyles = {
-  width: '1px',
-  height: '0px',
-  padding: 0,
-  overflow: 'hidden',
-  position: 'fixed',
-  top: '1px',
-  left: '1px',
-};
-
 
 export class Trap extends Base {
   active: boolean = false;
@@ -26,8 +16,8 @@ export class Trap extends Base {
     super(element, { id });
 
     this.element.addEventListener('focusin', this._onFocusIn, true);
-    this._pre = this._createGuard();
-    this._post = this._createGuard();
+    this._pre = creaetFocusGuard()
+    this._post = creaetFocusGuard();
     this._lastFocused = this.element;
   }
 
@@ -57,13 +47,6 @@ export class Trap extends Base {
     this._post.remove();
 
     console.log('disable trap', this.id);
-  }
-
-  private _createGuard() {
-    const guard = document.createElement('div');
-    guard.tabIndex = 0;
-    Object.assign(guard.style, guardStyles);
-    return guard;
   }
 
   private _onFocusOut = (e: FocusEvent) => {

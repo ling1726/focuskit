@@ -3,6 +3,7 @@
 - test ListGroup in TrapGroup
 - short circuit based on isClosestEntity
 - List: handle RTL -> use pipe state
+- updateTabIndex should only be applied for one element
 - Connect Traps
 - handle shift tab in tests;
-- implement waitForActiveElement(id)
+- commands can also be an array?

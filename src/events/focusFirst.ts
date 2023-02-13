@@ -4,7 +4,7 @@ import { tabbable } from "../utils/nodeFilters";
 import { isFocusElementEvent } from "./assertions/isFocusElementEvent";
 
 export const focusFirst: FocusKitEventHandler = (event, state, next) => {
-  if (!isFocusElementEvent(event) || event.detail.entity !== 'trap'|| event.detail.strategy !== 'first') {
+  if (!isFocusElementEvent(event) || event.detail.strategy !== 'first') {
     next();
     return;
   }
