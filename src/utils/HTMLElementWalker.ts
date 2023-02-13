@@ -23,6 +23,10 @@ export class HTMLElementWalker implements IHTMLElementWalker {
           return NodeFilter.FILTER_REJECT;
         }
 
+        if (!root.contains(node)) {
+          return NodeFilter.FILTER_REJECT;
+        }
+
         return this.filter(node);
       }
     }
