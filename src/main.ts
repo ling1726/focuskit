@@ -8,4 +8,4 @@ import ListScenario from './scenarios/List';
 import ListGroup from './scenarios/ListGroup';
 import ListInTrapGroup from './scenarios/ListInTrapGroup.ts';
 
-ListInTrapGroup(document.getElementById('app')!);
+// ListInTrapGroup(document.getElementById('app')!);

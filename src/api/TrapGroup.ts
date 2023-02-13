@@ -48,15 +48,7 @@ export class TrapGroup extends Base {
     this._pre.remove();
     this._post.remove();
 
-    const detail: ResetTabIndexesEvent = {
-      entity: TRAPGROUP,
-      id: this.id,
-      type: 'resettabindexes',
-      defaultTabbable: null,
-    }
-    const event = createFocusKitEvent(detail);
-
-    this.element.dispatchEvent(event);
+    this.resetTabIndexes();
   }
 
   enable() {
