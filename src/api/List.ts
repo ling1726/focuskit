@@ -1,7 +1,7 @@
 import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST, UPDATE_TABINDEX_EVENT } from "../constants";
 import { List as IList, ResetTabIndexesEvent, ListOptions, MoveEvent, UpdateTabIndexEvent, DefaultTabbable } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
-import { isClosestEntity } from "../utils/isClosestEntity";
+import { hasParentEntities } from "../utils/hasParentEntities";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { Base } from "./Base";
 
@@ -90,7 +90,7 @@ export class List extends Base implements IList  {
       return;
     }
 
-    if (!isClosestEntity(this.element, e.target)) {
+    if (hasParentEntities(e.target, this.element)) {
       return;
     }
 
@@ -103,7 +103,7 @@ export class List extends Base implements IList  {
   private _onFocusIn = (e: FocusEvent) => {
     const { target, relatedTarget } = e ;
 
-    if (!isClosestEntity(this.element, target)) {
+    if (hasParentEntities(target, this.element)) {
       return;
     }
 

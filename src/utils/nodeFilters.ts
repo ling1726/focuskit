@@ -1,5 +1,5 @@
 import { HTMLElementFilter } from "../types";
-import { isClosestEntity } from "./isClosestEntity";
+import { hasParentEntities } from "./hasParentEntities";
 
 export const allFocusable: HTMLElementFilter = element => {
   if (element.tabIndex >= 0 || element.hasAttribute('tabindex')) {
@@ -22,8 +22,7 @@ export const currentEntityFocusable: (target: HTMLElement) =>  HTMLElementFilter
     return NodeFilter.FILTER_SKIP;
   }
 
-  // TODO remove contains, stop should not be here
-  if (!isClosestEntity(target, element)) {
+  if (hasParentEntities(element, target)) {
     return NodeFilter.FILTER_REJECT;
   }
 

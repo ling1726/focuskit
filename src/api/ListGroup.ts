@@ -1,7 +1,7 @@
 import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST, LISTGROUP, UPDATE_TABINDEX_EVENT } from "../constants";
 import { DefaultTabbable, DisableListGroupEvent, EnableListGroupEvent, FocusElementEvent, ListOptions, MoveEvent, ResetTabIndexesEvent, UpdateTabIndexEvent } from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
-import { isClosestEntity } from "../utils/isClosestEntity";
+import { hasParentEntities } from "../utils/hasParentEntities";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { Base } from "./Base";
 
@@ -82,7 +82,7 @@ export class ListGroup extends Base {
   private _onFocusIn = (e: FocusEvent) => {
     const { target, relatedTarget } = e;
 
-    if (!isClosestEntity(this.element, target)) {
+    if (hasParentEntities(target, this.element)) {
       return;
     }
 
@@ -160,7 +160,7 @@ export class ListGroup extends Base {
       return;
     }
 
-    if (!isClosestEntity(this.element, e.target)) {
+    if (hasParentEntities(e.target, this.element)) {
       return;
     }
 
