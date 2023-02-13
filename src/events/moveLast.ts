@@ -1,6 +1,8 @@
 import { DIRECTION_LAST } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
+import { makeFocusable } from "../utils/makeFocusable";
+import { makeTabbable } from "../utils/makeTabbable";
 import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
@@ -22,5 +24,9 @@ export const moveLast: FocusKitEventHandler = (event, state, next) => {
   elementWalker.filter = filter;
 
   const nextFocused = elementWalker.lastChild();
-  nextFocused?.focus();
+  if (nextFocused) {
+    makeFocusable(activeElement);
+    makeTabbable(nextFocused);
+    nextFocused.focus();
+  }
 }

@@ -1,6 +1,8 @@
 import { DIRECTION_PREV  } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
+import { makeFocusable } from "../utils/makeFocusable";
+import { makeTabbable } from "../utils/makeTabbable";
 import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
@@ -22,11 +24,11 @@ export const movePrev: FocusKitEventHandler = (event, state, next) => {
   elementWalker.currentElement = activeElement;
   const filter = currentEntityFocusable(target);
   elementWalker.filter = filter;
-  let nextFocused = elementWalker.previousElement()
+  const nextFocused = elementWalker.previousElement() ?? elementWalker.lastChild();
 
-  if (!nextFocused) {
-    nextFocused = elementWalker.lastChild();
+  if (nextFocused) {
+    nextFocused.focus();
+    makeFocusable(activeElement);
+    makeTabbable(nextFocused);
   }
-
-  nextFocused?.focus();
 }
