@@ -6,6 +6,6 @@ import DisabledScenario from './scenarios/Disabled';
 import TrapGroupScenario from './scenarios/TrapGroup';
 import ListScenario from './scenarios/List';
 import ListGroup from './scenarios/ListGroup';
-import ListInTrapGroup from './scenarios/ListInTrapGroup';
+import ListInTrapGroup from './scenarios/ListInTrapGroup.ts';
 
-// ListScenario(document.getElementById('app')!);
+ListInTrapGroup(document.getElementById('app')!);
