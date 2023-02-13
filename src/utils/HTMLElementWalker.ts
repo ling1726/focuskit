@@ -8,6 +8,12 @@ export class HTMLElementWalker implements IHTMLElementWalker {
   private _nodeFilter: NodeFilter;
   private _root: HTMLElement;
 
+  static _instance: HTMLElementWalker;
+
+  static getInstance() {
+    return new HTMLElementWalker(document.body);
+  }
+
   constructor(root: HTMLElement, elementfilter?: HTMLElementFilter) {
     this.filter = elementfilter ?? (() => NodeFilter.FILTER_ACCEPT);
     this._root = root;

@@ -24,7 +24,7 @@ export class Commander {
   private _messagePipe: Pipe;
   private _elementWalker: HTMLElementWalker;
   constructor(element: HTMLElement) {
-    this._elementWalker = new HTMLElementWalker(element, () => NodeFilter.FILTER_ACCEPT);
+    this._elementWalker = HTMLElementWalker.getInstance();
 
     this.element = element;
     this.element.setAttribute('data-commander', '');
