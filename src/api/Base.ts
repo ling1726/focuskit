@@ -7,8 +7,6 @@ export class Base {
   id: EntityId;
   entity: EntityType;
 
-  protected _elementWalker: HTMLElementWalker;
-
   constructor(element: HTMLElement, options: { id: EntityId, entity: EntityType }) {
     const { id, entity } = options;
 
@@ -17,6 +15,5 @@ export class Base {
     this.entity = entity;
     this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
     this.element._focuskitEntity = entity;
-    this._elementWalker = HTMLElementWalker.getInstance();
   }
 }

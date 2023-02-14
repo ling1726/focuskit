@@ -20,7 +20,6 @@ export const movePrev: FocusKitEventHandler = (event, state, next) => {
   }
 
 
-  elementWalker.root = target;
   elementWalker.currentElement = activeElement;
   const filter = currentEntityFocusable(target);
   elementWalker.filter = filter;

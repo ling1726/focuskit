@@ -24,9 +24,9 @@ export class Commander {
   private _messagePipe: Pipe;
   private _elementWalker: HTMLElementWalker;
   constructor(element: HTMLElement) {
-    this._elementWalker = HTMLElementWalker.getInstance();
 
     this.element = element;
+    this._elementWalker = new HTMLElementWalker(this.element);
     this.element.setAttribute('data-commander', '');
     this.element.addEventListener(FOCUSKIT_EVENT, this._handleEvent);
 
@@ -55,8 +55,13 @@ export class Commander {
       return;
     }
 
+    if (!isHTMLElement(event.target)) {
+      return
+    }
+
     console.log('handling event', event.detail);
 
+    this._elementWalker.root = event.target;
     const activeElement = isHTMLElement(document.activeElement) ? document.activeElement : null;
     this._messagePipe.handleEvent(event, { elementWalker: this._elementWalker, activeElement });
   }
