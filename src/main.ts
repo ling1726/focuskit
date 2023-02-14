@@ -7,5 +7,7 @@ import TrapGroupScenario from './scenarios/TrapGroup';
 import ListScenario from './scenarios/List';
 import ListGroup from './scenarios/ListGroup';
 import ListInTrapGroup from './scenarios/ListInTrapGroup.ts';
+import ListGroupInList from './scenarios/ListGroupInList';
+import ListGroupInTrapGroup from './scenarios/ListGroupInTrapGroup';
 
-// ListInTrapGroup(document.getElementById('app')!);
+// ListGroupInTrapGroup(document.getElementById('app')!);

@@ -8,18 +8,16 @@ import { Base } from "./Base";
 export class ListGroup extends Base {
   active: boolean = false;
 
-  private _resetOnBlur: boolean;
   private _axis: 'horizontal' | 'vertical' | 'both';
   private _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
   private _defaultTabbable: DefaultTabbable;
 
   constructor(element: HTMLElement, options: ListOptions) {
-    const { resetOnBlur, axis = 'both', defaultTabbable = null } = options;
+    const { axis = 'both', defaultTabbable = null } = options;
     super(element, { ...options, entity: LISTGROUP, flags: { tabbable: true } });
 
     this._defaultTabbable = defaultTabbable;
     this._axis = axis;
-    this._resetOnBlur = !!resetOnBlur;
 
     this.element.addEventListener('keydown', this._onKeyDown);
     this.element.addEventListener('focusout', this._onFocusOut);
@@ -37,6 +35,7 @@ export class ListGroup extends Base {
     }
 
     this.element.dispatchEvent(createFocusKitEvent(details));
+    this._registerKeys();
   }
 
   disable() {
@@ -48,6 +47,7 @@ export class ListGroup extends Base {
     }
 
     this.element.dispatchEvent(createFocusKitEvent(details));
+    this._registerKeys();
   }
 
   focusElement() {
@@ -60,6 +60,20 @@ export class ListGroup extends Base {
 
     this.element.dispatchEvent(createFocusKitEvent(details));
   }
+
+  private _isTabbable = () => {
+    let cur: HTMLElement | null = this.element;
+    while (cur) {
+      if (cur._focuskitFlags?.tabbable) {
+        return false;
+      }
+
+      cur = cur.parentElement;
+    }
+
+    return true;
+  }
+
 
   private _focus(direction: MoveEvent['direction']) {
     if (!this.active) {
@@ -79,15 +93,9 @@ export class ListGroup extends Base {
   }
 
   private _onFocusOut = (e: FocusEvent) => {
-    if (!isHTMLElement(e.relatedTarget)) {
-      this._resetTabIndexes();
-      return;
+    if ((!isHTMLElement(e.relatedTarget) || !this.element.contains(e.relatedTarget))) {
+      this.disable();
     }
-
-    if (!this.element.contains(e.relatedTarget) && this._resetOnBlur) {
-      this._resetTabIndexes();
-    }
-
   }
 
   private _resetTabIndexes() {
@@ -115,6 +123,13 @@ export class ListGroup extends Base {
       this.focusElement();
     };
 
+    if (!this.active) {
+      delete this._keyHandlers['ArrowUp'];
+      delete this._keyHandlers['ArrowDown'];
+      delete this._keyHandlers['ArrowLeft'];
+      delete this._keyHandlers['ArrowRight'];
+    }
+
     switch (this._axis) {
       case "horizontal":
         delete this._keyHandlers['ArrowUp'];
@@ -139,7 +154,9 @@ export class ListGroup extends Base {
 
     if (e.key in this._keyHandlers) {
       this._keyHandlers[e.key](e);
-      e.preventDefault();
+      if (e.key !== 'Enter' && e.key !== 'Escape') {
+        e.preventDefault();
+      }
     }
   }
 

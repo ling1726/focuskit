@@ -19,8 +19,10 @@ export const initList: FocusKitEventHandler = (event, state, next) => {
 
   const elementWalker = state.elementWalker;
   elementWalker.filter = all? allFocusable : currentEntityFocusable(target);
-  let cur: HTMLElement | null = elementWalker.currentElement;
   let tabbable = defaultTabbable === 'first' ? elementWalker.firstChild() : defaultTabbable;
+  elementWalker.currentElement = target;
+  let cur: HTMLElement | null = elementWalker.currentElement;
+
 
   while (cur = elementWalker.nextElement()) {
     if (tabbable === cur) {

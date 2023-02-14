@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { html } from 'lit-html';
 import { FocusKitPage } from './FocusKitPage.js';
 
