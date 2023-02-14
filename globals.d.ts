@@ -1,5 +1,5 @@
 import { List, Trap, TrapGroup, Commander, Disabled, ListGroup } from './src/api';
-import { EntityType } from './src/types';
+import { EntityType, FocusKitFlags } from './src/types';
 
 declare global {
   interface Window {
@@ -15,5 +15,6 @@ declare global {
 
   interface HTMLElement {
     _focuskitEntity?: EntityType;
+    _focuskitFlags?: FocusKitFlags;
   }
 }

@@ -29,6 +29,10 @@ export type TabAreaId = number | string;
 export type EntityId = number | string;
 export type EntityType = 'List' | 'Trap' | 'TrapGroup' | 'ListGroup';
 
+export interface FocusKitFlags {
+  tabbable: boolean;
+}
+
 export interface ListOptions {
   id: EntityId;
   resetOnBlur?: boolean;
@@ -75,6 +79,7 @@ export interface DisableListGroupEvent extends BaseEvent<'disablelistgroup'> { }
 
 export interface ResetTabIndexesEvent extends BaseEvent<'resettabindexes'> {
   defaultTabbable: DefaultTabbable,
+  all?: boolean;
 }
 
 export interface EnableTrapGroupEvent extends BaseEvent<'enabletrapgroup'> { }

@@ -13,7 +13,7 @@ export class List extends Base implements IList  {
 
   constructor(element: HTMLElement, options: ListOptions) {
     const { id, resetOnBlur, axis = 'both', defaultTabbable = 'first' } = options;
-    super(element, { id, entity: LIST });
+    super(element, { id, entity: LIST, flags: { tabbable: false } });
 
     this.element = element;
     this._defaultTabbable = defaultTabbable;
@@ -47,6 +47,19 @@ export class List extends Base implements IList  {
     }
   }
 
+  private _isTabbable = () => {
+    let cur: HTMLElement | null = this.element;
+    while(cur) {
+      if (cur._focuskitFlags?.tabbable) {
+        return false;
+      }
+
+      cur = cur.parentElement;
+    }
+
+    return true;
+  }
+
   private _onFocusOut = (e: FocusEvent) => {
     if (!isHTMLElement(e.relatedTarget)) {
       this._resetTabIndexes();
@@ -60,11 +73,13 @@ export class List extends Base implements IList  {
   }
 
   private _resetTabIndexes() {
+    const isTabbable = this._isTabbable();
+
     const detail: ResetTabIndexesEvent = {
       entity: LIST,
       id: this.id,
       type: 'resettabindexes',
-      defaultTabbable: this._defaultTabbable,
+      defaultTabbable: isTabbable? this._defaultTabbable : null,
     }
 
     const event = createFocusKitEvent(detail);

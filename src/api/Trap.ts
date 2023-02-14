@@ -14,7 +14,7 @@ export class Trap extends Base {
 
   constructor(element: HTMLElement, options: { id: EntityId }) {
     const { id } = options;
-    super(element, { id, entity: TRAP });
+    super(element, { id, entity: TRAP, flags: { tabbable: false } });
 
     this.element.addEventListener('focusin', this._onFocusIn, true);
     this._pre = creaetFocusGuard()

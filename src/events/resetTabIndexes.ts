@@ -2,7 +2,7 @@ import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
 import { makeTabbable } from "../utils/makeTabbable";
-import { currentEntityFocusable } from "../utils/nodeFilters";
+import { allFocusable, currentEntityFocusable } from "../utils/nodeFilters";
 import { isResetTabIndexesEvent } from "./assertions/isResetTabIndexesEvent";
 
 export const initList: FocusKitEventHandler = (event, state, next) => {
@@ -11,31 +11,23 @@ export const initList: FocusKitEventHandler = (event, state, next) => {
     return;
   }
 
-  const { target, detail: { defaultTabbable }   } = event;
+  const { target, detail: { defaultTabbable, all }   } = event;
   if (!isHTMLElement(target)) {
     next();
     return
   }
 
   const elementWalker = state.elementWalker;
-  elementWalker.filter = currentEntityFocusable(target);
-
-  let cur: HTMLElement | null = elementWalker.nextElement();
-
-  if (cur) {
-    if (defaultTabbable === 'first') {
-      makeTabbable(cur);
-    } else {
-      elementWalker.currentElement = target;
-    }
-  }
+  elementWalker.filter = all? allFocusable : currentEntityFocusable(target);
+  let cur: HTMLElement | null = elementWalker.currentElement;
+  let tabbable = defaultTabbable === 'first' ? elementWalker.firstChild() : defaultTabbable;
 
   while (cur = elementWalker.nextElement()) {
-    if (!(cur instanceof HTMLElement)) {
-      return;
+    if (tabbable === cur) {
+      makeTabbable(cur);
+    } else {
+      makeFocusable(cur);
     }
-
-    makeFocusable(cur);
   }
 
   next();

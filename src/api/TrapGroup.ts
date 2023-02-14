@@ -18,7 +18,7 @@ export class TrapGroup extends Base {
       throw new Error('TrapGroup element must be focusable');
     }
 
-    super(element, { ...options, entity: TRAPGROUP });
+    super(element, { ...options, entity: TRAPGROUP, flags: { tabbable: true } });
 
     this.element.addEventListener('focusin', this._onFocusIn, true);
     this._pre = creaetFocusGuard();
@@ -35,6 +35,7 @@ export class TrapGroup extends Base {
       id: this.id,
       type: 'resettabindexes',
       defaultTabbable: null,
+      all: true,
     }
     const event = createFocusKitEvent(detail);
 
