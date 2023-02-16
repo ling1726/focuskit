@@ -1,98 +1,89 @@
-import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST, UPDATE_TABINDEX_EVENT } from "../constants";
-import { List as IList, ResetTabIndexesEvent, ListOptions, MoveEvent, UpdateTabIndexEvent, DefaultTabbable } from "../types";
+import {
+  DIRECTION_FIRST,
+  DIRECTION_LAST,
+  DIRECTION_NEXT,
+  DIRECTION_PREV,
+  LIST,
+} from "../constants";
+import {
+  List as IList,
+  ListOptions,
+  MoveEvent,
+  RecalcTabIndexesEvent,
+} from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { hasParentEntities } from "../utils/hasParentEntities";
-import { isHTMLElement } from "../utils/isHTMLElement";
 import { Base } from "./Base";
 
-export class List extends Base implements IList  {
-  private _resetOnBlur: boolean;
-  private _axis: 'horizontal' | 'vertical' | 'both';
+export class List extends Base implements IList {
+  private _axis: "horizontal" | "vertical" | "both";
   protected _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
-  private _defaultTabbable: DefaultTabbable;
 
   constructor(element: HTMLElement, options: ListOptions) {
-    const { id, resetOnBlur, axis = 'both', defaultTabbable = 'first' } = options;
-    super(element, { id, entity: LIST, flags: { tabbable: false } });
+    const { id, axis = "both" } = options;
+    super(element, {
+      id,
+      entity: LIST,
+    });
 
     this.element = element;
-    this._defaultTabbable = defaultTabbable;
     this._axis = axis;
-    this._resetOnBlur = !!resetOnBlur;
     this.id = id;
-    this.element.addEventListener('keydown', this._onKeyDown);
-    this.element.addEventListener('focusout', this._onFocusOut);
+    this.element.addEventListener("keydown", this._onKeyDown);
     this._registerKeys();
-    this._resetTabIndexes();
+    this._recalcTabIndexes();
   }
 
+  protected _onFocusIn(): void {
+    this.active = true;
+  }
+
+  protected _onFocusOut(): void {
+    this.active = false;
+  }
+
+  protected onActiveChange(): void {}
+
   private _registerKeys() {
-    this._keyHandlers['ArrowUp'] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers['ArrowDown'] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers['ArrowLeft'] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers['ArrowRight'] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers['Home'] = () => this._focus(DIRECTION_FIRST);
-    this._keyHandlers['End'] = () => this._focus(DIRECTION_LAST);
+    this._keyHandlers["ArrowUp"] = () => this._focus(DIRECTION_PREV);
+    this._keyHandlers["ArrowDown"] = () => this._focus(DIRECTION_NEXT);
+    this._keyHandlers["ArrowLeft"] = () => this._focus(DIRECTION_PREV);
+    this._keyHandlers["ArrowRight"] = () => this._focus(DIRECTION_NEXT);
+    this._keyHandlers["Home"] = () => this._focus(DIRECTION_FIRST);
+    this._keyHandlers["End"] = () => this._focus(DIRECTION_LAST);
 
     switch (this._axis) {
       case "horizontal":
-        delete this._keyHandlers['ArrowUp'];
-        delete this._keyHandlers['ArrowDown'];
+        delete this._keyHandlers["ArrowUp"];
+        delete this._keyHandlers["ArrowDown"];
         break;
       case "vertical":
-        delete this._keyHandlers['ArrowLeft'];
-        delete this._keyHandlers['ArrowRight'];
+        delete this._keyHandlers["ArrowLeft"];
+        delete this._keyHandlers["ArrowRight"];
         break;
       default:
     }
   }
 
-  private _isTabbable = () => {
-    let cur: HTMLElement | null = this.element;
-    while(cur) {
-      if (cur._focuskitFlags?.tabbable) {
-        return false;
-      }
-
-      cur = cur.parentElement;
-    }
-
-    return true;
-  }
-
-  private _onFocusOut = (e: FocusEvent) => {
-    if (!isHTMLElement(e.relatedTarget)) {
-      this._resetTabIndexes();
-      return;
-    }
-
-    if (!this.element.contains(e.relatedTarget) && this._resetOnBlur) {
-      this._resetTabIndexes();
-    }
-
-  }
-
-  private _resetTabIndexes() {
-    const isTabbable = this._isTabbable();
-
-    const detail: ResetTabIndexesEvent = {
+  private _recalcTabIndexes() {
+    const detail: RecalcTabIndexesEvent = {
       entity: LIST,
       id: this.id,
-      type: 'resettabindexes',
-      defaultTabbable: isTabbable? this._defaultTabbable : null,
-    }
+      type: "recalctabindexes",
+      originalTarget: this.element,
+    };
 
     const event = createFocusKitEvent(detail);
     this.element.dispatchEvent(event);
   }
 
-  private _focus(direction: MoveEvent['direction']) {
+  private _focus(direction: MoveEvent["direction"]) {
     const detail: MoveEvent = {
       entity: LIST,
       id: this.id,
-      type: 'move',
+      type: "move",
       direction,
-    }
+    };
 
     const event = createFocusKitEvent(detail);
 
@@ -112,5 +103,5 @@ export class List extends Base implements IList  {
       this._keyHandlers[e.key](e);
       e.preventDefault();
     }
-  }
+  };
 }

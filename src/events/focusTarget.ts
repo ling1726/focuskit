@@ -8,5 +8,4 @@ export const focusTarget: FocusKitEventHandler = (event, state, next) => {
   }
 
   event.detail.target?.focus();
-}
-
+};

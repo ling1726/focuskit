@@ -1,81 +1,116 @@
-import { DIRECTION_FIRST, DIRECTION_LAST, DIRECTION_NEXT, DIRECTION_PREV, LIST, LISTGROUP, UPDATE_TABINDEX_EVENT } from "../constants";
-import { DefaultTabbable, DisableListGroupEvent, EnableListGroupEvent, FocusElementEvent, ListOptions, MoveEvent, ResetTabIndexesEvent, UpdateTabIndexEvent } from "../types";
+import {
+  DIRECTION_FIRST,
+  DIRECTION_LAST,
+  DIRECTION_NEXT,
+  DIRECTION_PREV,
+  LIST,
+  LISTGROUP,
+} from "../constants";
+import {
+  FocusElementEvent,
+  ListOptions,
+  MoveEvent,
+  RecalcTabIndexesEvent,
+  UpdateTabIndexEvent,
+} from "../types";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { hasParentEntities } from "../utils/hasParentEntities";
-import { isHTMLElement } from "../utils/isHTMLElement";
 import { Base } from "./Base";
 
 export class ListGroup extends Base {
-  active: boolean = false;
-
-  private _axis: 'horizontal' | 'vertical' | 'both';
+  private _axis: "horizontal" | "vertical" | "both";
   private _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
-  private _defaultTabbable: DefaultTabbable;
 
   constructor(element: HTMLElement, options: ListOptions) {
-    const { axis = 'both', defaultTabbable = null } = options;
-    super(element, { ...options, entity: LISTGROUP, flags: { tabbable: true } });
+    const { axis = "both" } = options;
+    super(element, {
+      ...options,
+      entity: LISTGROUP,
+    });
 
-    this._defaultTabbable = defaultTabbable;
     this._axis = axis;
 
-    this.element.addEventListener('keydown', this._onKeyDown);
-    this.element.addEventListener('focusout', this._onFocusOut);
+    this.element.addEventListener("keydown", this._onKeyDown);
 
     this._registerKeys();
-    this._resetTabIndexes();
+    this._recalcTabIndexes();
   }
 
   enable() {
-    this.active = true;
-    const details: EnableListGroupEvent = {
-      entity: LISTGROUP,
-      id: this.id,
-      type: 'enablelistgroup',
-    }
-
-    this.element.dispatchEvent(createFocusKitEvent(details));
-    this._registerKeys();
+    this.makeElementUntabbable();
+    this.focusFirst();
   }
 
   disable() {
-    this.active = false;
-    const details: DisableListGroupEvent = {
-      entity: LISTGROUP,
-      id: this.id,
-      type: 'disablelistgroup',
+    this.makeTabbable();
+    if (document.activeElement !== document.body) {
+      this.focusElement();
     }
+  }
+
+  makeElementUntabbable() {
+    const details: UpdateTabIndexEvent = {
+      entity: this.entity,
+      id: this.id,
+      type: "updatetabindex",
+      element: this.element,
+      tabindex: "focusable",
+    };
 
     this.element.dispatchEvent(createFocusKitEvent(details));
-    this._registerKeys();
+  }
+
+  makeTabbable() {
+    const details: UpdateTabIndexEvent = {
+      entity: this.entity,
+      id: this.id,
+      type: "updatetabindex",
+      element: this.element,
+      tabindex: "tabbable",
+    };
+
+    this.element.dispatchEvent(createFocusKitEvent(details));
+  }
+
+  focusFirst() {
+    const details: FocusElementEvent = {
+      entity: this.entity,
+      id: this.id,
+      type: "focuselement",
+      strategy: "first",
+    };
+
+    this.element.dispatchEvent(createFocusKitEvent(details));
   }
 
   focusElement() {
     const details: FocusElementEvent = {
       entity: LISTGROUP,
       id: this.id,
-      type: 'focuselement',
+      type: "focuselement",
       target: this.element,
-    }
+    };
 
     this.element.dispatchEvent(createFocusKitEvent(details));
   }
 
-  private _isTabbable = () => {
-    let cur: HTMLElement | null = this.element;
-    while (cur) {
-      if (cur._focuskitFlags?.tabbable) {
-        return false;
-      }
-
-      cur = cur.parentElement;
-    }
-
-    return true;
+  protected onActiveChange(): void {
+    this._recalcTabIndexes();
+    this._registerKeys();
+    this.active ? this.enable() : this.disable();
   }
 
+  protected _onFocusIn(): void {
+    this.tabbable = false;
+    this.active = true;
+  }
 
-  private _focus(direction: MoveEvent['direction']) {
+  protected _onFocusOut() {
+    this.tabbable = true;
+    this.active = false;
+  }
+
+  private _focus(direction: MoveEvent["direction"]) {
     if (!this.active) {
       return;
     }
@@ -83,61 +118,62 @@ export class ListGroup extends Base {
     const detail: MoveEvent = {
       entity: LISTGROUP,
       id: this.id,
-      type: 'move',
+      type: "move",
       direction,
-    }
+    };
 
     const event = createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }
 
-  private _onFocusOut = (e: FocusEvent) => {
-    if ((!isHTMLElement(e.relatedTarget) || !this.element.contains(e.relatedTarget))) {
-      this.disable();
-    }
+  private set tabbable(val: boolean) {
+    this.element._focuskitFlags!.tabbable = val;
   }
 
-  private _resetTabIndexes() {
-    const detail: ResetTabIndexesEvent = {
+  private _recalcTabIndexes() {
+    const detail: RecalcTabIndexesEvent = {
       entity: LIST,
       id: this.id,
-      type: 'resettabindexes',
-      defaultTabbable: this._defaultTabbable,
-    }
+      type: "recalctabindexes",
+      originalTarget: this.element,
+    };
 
     const event = createFocusKitEvent(detail);
     this.element.dispatchEvent(event);
   }
 
   private _registerKeys() {
-    this._keyHandlers['ArrowUp'] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers['ArrowDown'] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers['ArrowLeft'] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers['ArrowRight'] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers['Home'] = () => this._focus(DIRECTION_FIRST);
-    this._keyHandlers['End'] = () => this._focus(DIRECTION_LAST);
-    this._keyHandlers['Enter'] = () => this.enable();
-    this._keyHandlers['Escape'] = () => {
-      this.disable();
-      this.focusElement();
+    this._keyHandlers["ArrowUp"] = () => this._focus(DIRECTION_PREV);
+    this._keyHandlers["ArrowDown"] = () => this._focus(DIRECTION_NEXT);
+    this._keyHandlers["ArrowLeft"] = () => this._focus(DIRECTION_PREV);
+    this._keyHandlers["ArrowRight"] = () => this._focus(DIRECTION_NEXT);
+    this._keyHandlers["Home"] = () => this._focus(DIRECTION_FIRST);
+    this._keyHandlers["End"] = () => this._focus(DIRECTION_LAST);
+    this._keyHandlers["Enter"] = () => {
+      this.tabbable = false;
+      this.active = true;
+    };
+    this._keyHandlers["Escape"] = () => {
+      this.tabbable = true;
+      this.active = false;
     };
 
     if (!this.active) {
-      delete this._keyHandlers['ArrowUp'];
-      delete this._keyHandlers['ArrowDown'];
-      delete this._keyHandlers['ArrowLeft'];
-      delete this._keyHandlers['ArrowRight'];
+      delete this._keyHandlers["ArrowUp"];
+      delete this._keyHandlers["ArrowDown"];
+      delete this._keyHandlers["ArrowLeft"];
+      delete this._keyHandlers["ArrowRight"];
     }
 
     switch (this._axis) {
       case "horizontal":
-        delete this._keyHandlers['ArrowUp'];
-        delete this._keyHandlers['ArrowDown'];
+        delete this._keyHandlers["ArrowUp"];
+        delete this._keyHandlers["ArrowDown"];
         break;
       case "vertical":
-        delete this._keyHandlers['ArrowLeft'];
-        delete this._keyHandlers['ArrowRight'];
+        delete this._keyHandlers["ArrowLeft"];
+        delete this._keyHandlers["ArrowRight"];
         break;
       default:
     }
@@ -154,10 +190,9 @@ export class ListGroup extends Base {
 
     if (e.key in this._keyHandlers) {
       this._keyHandlers[e.key](e);
-      if (e.key !== 'Enter' && e.key !== 'Escape') {
+      if (e.key !== "Enter" && e.key !== "Escape") {
         e.preventDefault();
       }
     }
-  }
-
+  };
 }

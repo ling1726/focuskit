@@ -1,23 +1,19 @@
-import { LIST } from "../constants";
 import { FocusKitEventHandler } from "../types";
-import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
 import { makeTabbable } from "../utils/makeTabbable";
 import { isUpdateTabIndexEvent } from "./assertions/isUpdateTabIndexEvent";
 
-export const updateTabIndex: FocusKitEventHandler = (event, state, next) => {
-  if (!isUpdateTabIndexEvent(event) || event.detail.entity !== LIST) {
+export const updateTabIndex: FocusKitEventHandler = (event, _state, next) => {
+  if (!isUpdateTabIndexEvent(event)) {
     next();
     return;
   }
 
-  const target = event.target;
-  const { activeElement } = state;
-  if (!isHTMLElement(target) || !isHTMLElement(activeElement) || !target.contains(activeElement)) {
-    next();
-    return
-  }
+  const { tabindex, element } = event.detail;
 
-  makeFocusable(event.detail.prev);
-  makeTabbable(activeElement);
-}
+  if (tabindex === "focusable") {
+    makeFocusable(element);
+  } else {
+    makeTabbable(element);
+  }
+};
