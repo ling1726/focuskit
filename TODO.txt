@@ -1,5 +1,6 @@
 - handle events in order
-- commands can also be an array?
+- make creating event easier -> shouldn't define base things all the time
+- update commands in after each other to array of commands
 - handle default focused element
 - short circuit based on isClosestEntity
 - List: handle RTL -> use pipe state

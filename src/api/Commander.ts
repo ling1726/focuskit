@@ -1,6 +1,6 @@
 import { FOCUSKIT_EVENT } from "../constants";
 import { createPipe } from "../utils/createPipe";
-import { Pipe } from "../types";
+import { BaseEvent, Pipe } from "../types";
 import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isFocusKitEvent } from "../utils/isFocusKitEvent";
 import { moveNext } from "../events/moveNext";
@@ -52,17 +52,22 @@ export class Commander {
       return;
     }
 
-    console.log("handling event", event.detail);
-
     this._elementWalker.root = event.target;
     const activeElement = isHTMLElement(document.activeElement)
       ? document.activeElement
       : null;
 
-    this._messagePipe.handleEvent(event.detail, {
-      elementWalker: this._elementWalker,
-      activeElement,
-      target: event.target,
-    });
+    const eventsToHandle: BaseEvent[] = Array.isArray(event.detail)
+      ? event.detail
+      : [event.detail];
+
+    for (const eventToHandle of eventsToHandle) {
+      console.log("handling event", eventToHandle);
+      this._messagePipe.handleEvent(eventToHandle, {
+        elementWalker: this._elementWalker,
+        activeElement,
+        target: event.target,
+      });
+    }
   };
 }
