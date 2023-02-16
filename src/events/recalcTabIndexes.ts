@@ -11,7 +11,7 @@ interface RecalcQueueItem extends RecalcTabIndexesEvent {
   target: HTMLElement;
 }
 
-export const recalcTabIndexes: FocusKitEventHandler = (e, state, next) => {
+export const recalcTabIndexes: FocusKitEventHandler = (e, state, _next) => {
   if (!isRecalcTabIndexesEvent(e)) {
     return;
   }
