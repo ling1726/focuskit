@@ -38,12 +38,12 @@ export class List extends Entity implements IList {
   protected onActiveChange(): void {}
 
   private _registerKeys() {
-    this._keyHandlers["ArrowUp"] = () => this._focus(directions.PREV);
-    this._keyHandlers["ArrowDown"] = () => this._focus(directions.NEXT);
-    this._keyHandlers["ArrowLeft"] = () => this._focus(directions.PREV);
-    this._keyHandlers["ArrowRight"] = () => this._focus(directions.NEXT);
-    this._keyHandlers["Home"] = () => this._focus(directions.FIRST);
-    this._keyHandlers["End"] = () => this._focus(directions.LAST);
+    this._keyHandlers["ArrowUp"] = () => this._move(directions.PREV);
+    this._keyHandlers["ArrowDown"] = () => this._move(directions.NEXT);
+    this._keyHandlers["ArrowLeft"] = () => this._move(directions.PREV);
+    this._keyHandlers["ArrowRight"] = () => this._move(directions.NEXT);
+    this._keyHandlers["Home"] = () => this._move(directions.FIRST);
+    this._keyHandlers["End"] = () => this._move(directions.LAST);
 
     switch (this._axis) {
       case "horizontal":
@@ -58,7 +58,7 @@ export class List extends Entity implements IList {
     }
   }
 
-  private _focus(direction: MoveEvent["direction"]) {
+  private _move(direction: MoveEvent["direction"]) {
     const event = this.createFocusKitEvent<MoveEvent>({
       type: events.MOVE_EVENT,
       direction,
