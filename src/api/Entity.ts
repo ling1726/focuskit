@@ -34,9 +34,27 @@ export abstract class Entity {
     this.id = id;
     this.entity = entity;
     this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
-    this.element._focuskitEntity = entity;
     this.element.addEventListener("focusin", this._onFocusInBase);
     this.element.addEventListener("focusout", this._onFocusOutBase);
+  }
+
+  get active() {
+    return this._active;
+  }
+
+  set active(val: boolean) {
+    if (val === this._active) {
+      return;
+    }
+
+    console.log(this.entity, this.id, "active:", val);
+    this._active = val;
+
+    if (this.element._focuskitFlags) {
+      Object.assign(this.element._focuskitFlags, { active: val });
+    }
+
+    this.onActiveChange();
   }
 
   protected abstract _onFocusIn(
@@ -50,6 +68,23 @@ export abstract class Entity {
   ): void;
 
   protected abstract onActiveChange(): void;
+
+  protected createFocusKitEvent<T extends BaseEvent>(
+    details: Omit<T, "id" | "entity">
+  ): CustomEvent<T> {
+    const event = new CustomEvent<T>(FOCUSKIT_EVENT, {
+      cancelable: true,
+      bubbles: true,
+      // @ts-ignore
+      detail: {
+        id: this.id,
+        entity: this.entity,
+        ...details,
+      },
+    });
+
+    return event;
+  }
 
   private _onFocusInBase = (e: FocusEvent) => {
     const { target: nextFocused, relatedTarget: prevFocused } = e;
@@ -96,40 +131,4 @@ export abstract class Entity {
       this._onFocusOut(prevFocused, nextFocused);
     }
   };
-
-  get active() {
-    return this._active;
-  }
-
-  set active(val: boolean) {
-    if (val === this._active) {
-      return;
-    }
-
-    console.log(this.entity, this.id, "active:", val);
-    this._active = val;
-
-    if (this.element._focuskitFlags) {
-      Object.assign(this.element._focuskitFlags, { active: val });
-    }
-
-    this.onActiveChange();
-  }
-
-  protected createFocusKitEvent<T extends BaseEvent>(
-    details: Omit<T, "id" | "entity">
-  ): CustomEvent<T> {
-    const event = new CustomEvent<T>(FOCUSKIT_EVENT, {
-      cancelable: true,
-      bubbles: true,
-      // @ts-ignore
-      detail: {
-        id: this.id,
-        entity: this.entity,
-        ...details,
-      },
-    });
-
-    return event;
-  }
 }
