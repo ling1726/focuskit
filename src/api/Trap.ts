@@ -75,12 +75,10 @@ export class Trap extends Entity {
   }
 
   protected _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
-    const event = this.createFocusKitEvent<FocusElementEvent>({
+    this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       strategy,
     });
-
-    this.element.dispatchEvent(event);
   }
 
   private _focusLastFocused() {
@@ -89,11 +87,9 @@ export class Trap extends Entity {
       return;
     }
 
-    const event = this.createFocusKitEvent<FocusElementEvent>({
+    this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this._lastFocused,
     });
-
-    this.element.dispatchEvent(event);
   }
 }

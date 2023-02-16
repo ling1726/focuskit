@@ -58,30 +58,25 @@ export class ListGroup extends Entity {
   }
 
   private _setTabindex(tabindex: UpdateTabIndexEvent["tabindex"]) {
-    const event = this.createFocusKitEvent<UpdateTabIndexEvent>({
+    this.dispatchFocusKitEvent<UpdateTabIndexEvent>({
       type: events.UPDATE_TABINDEX_EVENT,
       element: this.element,
       tabindex,
     });
-    this.element.dispatchEvent(event);
   }
 
   private _focusFirst() {
-    const event = this.createFocusKitEvent<FocusElementEvent>({
+    this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       strategy: "first",
     });
-
-    this.element.dispatchEvent(event);
   }
 
   private _focusElement() {
-    const event = this.createFocusKitEvent<FocusElementEvent>({
+    this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this.element,
     });
-
-    this.element.dispatchEvent(event);
   }
 
   private _focus(direction: MoveEvent["direction"]) {
@@ -96,9 +91,7 @@ export class ListGroup extends Entity {
       direction,
     };
 
-    const event = this.createFocusKitEvent(detail);
-
-    this.element.dispatchEvent(event);
+    this.dispatchFocusKitEvent(detail);
   }
 
   private set category(val: EntityCategory) {

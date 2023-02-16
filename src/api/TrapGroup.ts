@@ -71,12 +71,10 @@ export class TrapGroup extends Entity {
   };
 
   private _focusElement() {
-    const event = this.createFocusKitEvent<FocusElementEvent>({
+    this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this.element,
     });
-
-    this.element.dispatchEvent(event);
   }
 
   protected _onFocusOut(_prev: HTMLElement, next: HTMLElement | null) {
@@ -106,12 +104,10 @@ export class TrapGroup extends Entity {
   }
 
   protected _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
-    const event = this.createFocusKitEvent<FocusElementEvent>({
+    this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       strategy,
     });
-
-    this.element.dispatchEvent(event);
   }
 
   private _focusLastFocused() {
@@ -120,11 +116,9 @@ export class TrapGroup extends Entity {
       return;
     }
 
-    const event = this.createFocusKitEvent<FocusElementEvent>({
+    this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this._lastFocused,
     });
-
-    this.element.dispatchEvent(event);
   }
 }

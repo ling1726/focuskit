@@ -81,9 +81,9 @@ export abstract class Entity {
 
   protected abstract onActiveChange(): void;
 
-  protected createFocusKitEvent<T extends BaseEvent>(
+  protected dispatchFocusKitEvent<T extends BaseEvent>(
     details: Omit<T, "id" | "entity">
-  ): CustomEvent<T> {
+  ): void {
     const event = new CustomEvent<T>(FOCUSKIT_EVENT, {
       cancelable: true,
       bubbles: true,
@@ -95,16 +95,14 @@ export abstract class Entity {
       },
     });
 
-    return event;
+    this.element.dispatchEvent(event);
   }
 
   recalcTabIndexes() {
-    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
+    this.dispatchFocusKitEvent<RecalcTabIndexesEvent>({
       originalTarget: this.element,
       type: "recalctabindexes",
     });
-
-    this.element.dispatchEvent(event);
   }
 
   private _onFocusInBase = (e: FocusEvent) => {

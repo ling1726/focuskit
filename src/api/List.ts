@@ -59,12 +59,10 @@ export class List extends Entity implements IList {
   }
 
   private _move(direction: MoveEvent["direction"]) {
-    const event = this.createFocusKitEvent<MoveEvent>({
+    this.dispatchFocusKitEvent<MoveEvent>({
       type: events.MOVE_EVENT,
       direction,
     });
-
-    this.element.dispatchEvent(event);
   }
 
   protected _onKeyDown = (e: KeyboardEvent) => {
