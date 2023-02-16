@@ -1,10 +1,5 @@
 import { entities, directions, events } from "../constants";
-import {
-  List as IList,
-  ListOptions,
-  MoveEvent,
-  RecalcTabIndexesEvent,
-} from "../types";
+import { List as IList, ListOptions, MoveEvent } from "../types";
 import { hasParentEntities } from "../utils/hasParentEntities";
 import { Entity } from "./Entity";
 
@@ -24,7 +19,7 @@ export class List extends Entity implements IList {
     this.id = id;
     this.element.addEventListener("keydown", this._onKeyDown);
     this._registerKeys();
-    this._recalcTabIndexes();
+    this.recalcTabIndexes();
   }
 
   protected dispose() {
@@ -61,15 +56,6 @@ export class List extends Entity implements IList {
         break;
       default:
     }
-  }
-
-  private _recalcTabIndexes() {
-    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
-      type: events.RECALC_TABINDEXES,
-      originalTarget: this.element,
-    });
-
-    this.element.dispatchEvent(event);
   }
 
   private _focus(direction: MoveEvent["direction"]) {

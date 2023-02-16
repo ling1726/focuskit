@@ -21,26 +21,29 @@ export const recalcTabIndexes: FocusKitEventHandler = (e, state, next) => {
     const target = queuedRecalcs.shift()!;
     const { active, category } = target._focuskitFlags!;
 
-    let children: HTMLElement[] = [];
+    let childEntities: HTMLElement[] = [];
+
     if (category === "group") {
       console.log("started recalc", target);
 
-      children = active
+      childEntities = active
         ? recalcActiveGroup(target, state.elementWalker)
         : recalcInActiveGroup(target, state.elementWalker);
 
       console.log("finished recalc", target);
-    } else {
+    }
+
+    if (category === "collection") {
       console.log("started recalc", target);
 
-      children = active
+      childEntities = active
         ? recalcActiveCollection(target, state.elementWalker)
         : recalcInActiveCollection(target, state.elementWalker);
 
       console.log("finished recalc", target);
     }
 
-    queuedRecalcs = queuedRecalcs.concat(children);
+    queuedRecalcs = queuedRecalcs.concat(childEntities);
   }
 };
 

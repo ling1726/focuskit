@@ -1,5 +1,11 @@
 import { FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
-import { BaseEvent, EntityCategory, EntityId, EntityType } from "../types";
+import {
+  BaseEvent,
+  EntityCategory,
+  EntityId,
+  EntityType,
+  RecalcTabIndexesEvent,
+} from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 
 export abstract class Entity {
@@ -90,6 +96,15 @@ export abstract class Entity {
     });
 
     return event;
+  }
+
+  recalcTabIndexes() {
+    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
+      originalTarget: this.element,
+      type: "recalctabindexes",
+    });
+
+    this.element.dispatchEvent(event);
   }
 
   private _onFocusInBase = (e: FocusEvent) => {

@@ -1,5 +1,5 @@
 import { entities, events } from "../constants";
-import { EntityId, FocusElementEvent, RecalcTabIndexesEvent } from "../types";
+import { EntityId, FocusElementEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
 import { hasParentEntities } from "../utils/hasParentEntities";
 import { isFocusable } from "../utils/isFocusable";
@@ -30,15 +30,6 @@ export class TrapGroup extends Entity {
 
   protected dispose() {
     this.element.removeEventListener("keydown", this._onKeyDown);
-  }
-
-  recalcTabIndexes() {
-    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
-      originalTarget: this.element,
-      type: "recalctabindexes",
-    });
-
-    this.element.dispatchEvent(event);
   }
 
   protected onActiveChange(): void {

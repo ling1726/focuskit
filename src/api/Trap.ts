@@ -46,9 +46,7 @@ export class Trap extends Entity {
     console.log("disable trap", this.id);
   }
 
-  protected onActiveChange(): void {
-    throw new Error("Method not implemented.");
-  }
+  protected onActiveChange(): void {}
 
   protected _onFocusIn(_prev: HTMLElement | null, next: HTMLElement): void {
     this._lastFocused = next;

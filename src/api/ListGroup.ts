@@ -4,7 +4,6 @@ import {
   FocusElementEvent,
   ListOptions,
   MoveEvent,
-  RecalcTabIndexesEvent,
   UpdateTabIndexEvent,
 } from "../types";
 import { hasParentEntities } from "../utils/hasParentEntities";
@@ -26,7 +25,7 @@ export class ListGroup extends Entity {
     this.element.addEventListener("keydown", this._onKeyDown);
 
     this._registerKeys();
-    this._recalcTabIndexes();
+    this.recalcTabIndexes();
   }
 
   protected dispose() {
@@ -34,58 +33,18 @@ export class ListGroup extends Entity {
     this.element.removeEventListener("keydown", this._onKeyDown);
   }
 
-  enable() {
-    this.makeElementUntabbable();
-    this.focusFirst();
-  }
-
-  disable() {
-    this.makeTabbable();
-    if (document.activeElement !== document.body) {
-      this.focusElement();
-    }
-  }
-
-  makeElementUntabbable() {
-    const event = this.createFocusKitEvent<UpdateTabIndexEvent>({
-      type: events.UPDATE_TABINDEX_EVENT,
-      element: this.element,
-      tabindex: "focusable",
-    });
-    this.element.dispatchEvent(event);
-  }
-
-  makeTabbable() {
-    const event = this.createFocusKitEvent<UpdateTabIndexEvent>({
-      type: events.UPDATE_TABINDEX_EVENT,
-      element: this.element,
-      tabindex: "tabbable",
-    });
-    this.element.dispatchEvent(event);
-  }
-
-  focusFirst() {
-    const event = this.createFocusKitEvent<FocusElementEvent>({
-      type: events.FOCUS_ELEMENT,
-      strategy: "first",
-    });
-
-    this.element.dispatchEvent(event);
-  }
-
-  focusElement() {
-    const event = this.createFocusKitEvent<FocusElementEvent>({
-      type: events.FOCUS_ELEMENT,
-      element: this.element,
-    });
-
-    this.element.dispatchEvent(event);
-  }
-
   protected onActiveChange(): void {
-    this._recalcTabIndexes();
+    this.recalcTabIndexes();
     this._registerKeys();
-    this.active ? this.enable() : this.disable();
+    if (this._active) {
+      this._setTabindex("focusable");
+      this._focusFirst();
+    } else {
+      this._setTabindex("tabbable");
+      if (document.activeElement !== document.body) {
+        this._focusElement();
+      }
+    }
   }
 
   protected _onFocusIn(): void {
@@ -96,6 +55,33 @@ export class ListGroup extends Entity {
   protected _onFocusOut() {
     this.category = "group";
     this.active = false;
+  }
+
+  private _setTabindex(tabindex: UpdateTabIndexEvent["tabindex"]) {
+    const event = this.createFocusKitEvent<UpdateTabIndexEvent>({
+      type: events.UPDATE_TABINDEX_EVENT,
+      element: this.element,
+      tabindex,
+    });
+    this.element.dispatchEvent(event);
+  }
+
+  private _focusFirst() {
+    const event = this.createFocusKitEvent<FocusElementEvent>({
+      type: events.FOCUS_ELEMENT,
+      strategy: "first",
+    });
+
+    this.element.dispatchEvent(event);
+  }
+
+  private _focusElement() {
+    const event = this.createFocusKitEvent<FocusElementEvent>({
+      type: events.FOCUS_ELEMENT,
+      element: this.element,
+    });
+
+    this.element.dispatchEvent(event);
   }
 
   private _focus(direction: MoveEvent["direction"]) {
@@ -117,14 +103,6 @@ export class ListGroup extends Entity {
 
   private set category(val: EntityCategory) {
     this.element._focuskitFlags!.category = val;
-  }
-
-  private _recalcTabIndexes() {
-    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
-      type: events.RECALC_TABINDEXES,
-      originalTarget: this.element,
-    });
-    this.element.dispatchEvent(event);
   }
 
   private _registerKeys() {
