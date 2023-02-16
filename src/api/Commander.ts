@@ -38,6 +38,11 @@ export class Commander {
     this._messagePipe.use(recalcTabIndexes);
   }
 
+  dispose() {
+    this.element.removeAttribute("data-commander");
+    this.element.removeEventListener(FOCUSKIT_EVENT, this._handleEvent);
+  }
+
   private _handleEvent = (event: Event) => {
     assertHTMLElement(event.target);
 

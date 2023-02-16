@@ -28,6 +28,10 @@ export class TrapGroup extends Entity {
     this.recalcTabIndexes();
   }
 
+  protected dispose() {
+    this.element.removeEventListener("keydown", this._onKeyDown);
+  }
+
   recalcTabIndexes() {
     const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
       originalTarget: this.element,

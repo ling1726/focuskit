@@ -27,6 +27,11 @@ export class List extends Entity implements IList {
     this._recalcTabIndexes();
   }
 
+  protected dispose() {
+    super.dispose();
+    this.element.removeEventListener("keydown", this._onKeyDown);
+  }
+
   protected _onFocusIn(): void {
     this.active = true;
   }

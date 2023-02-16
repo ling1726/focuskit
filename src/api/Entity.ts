@@ -38,6 +38,12 @@ export abstract class Entity {
     this.element.addEventListener("focusout", this._onFocusOutBase);
   }
 
+  protected dispose() {
+    this.element.removeEventListener("focusin", this._onFocusInBase);
+    this.element.removeEventListener("focusout", this._onFocusOutBase);
+    this.element.removeAttribute(FOCUS_KIT_ATTR);
+  }
+
   get active() {
     return this._active;
   }

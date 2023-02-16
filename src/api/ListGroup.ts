@@ -29,6 +29,11 @@ export class ListGroup extends Entity {
     this._recalcTabIndexes();
   }
 
+  protected dispose() {
+    super.dispose();
+    this.element.removeEventListener("keydown", this._onKeyDown);
+  }
+
   enable() {
     this.makeElementUntabbable();
     this.focusFirst();
