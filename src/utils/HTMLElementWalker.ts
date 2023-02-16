@@ -23,15 +23,19 @@ export class HTMLElementWalker implements IHTMLElementWalker {
           return NodeFilter.FILTER_REJECT;
         }
 
-        if (!root.contains(node)) {
+        if (!this.root.contains(node)) {
           return NodeFilter.FILTER_REJECT;
         }
 
         return this.filter(node);
-      }
-    }
+      },
+    };
 
-    this._treeWalker = document.createTreeWalker(this.root, NodeFilter.SHOW_ELEMENT, this._nodeFilter);
+    this._treeWalker = document.createTreeWalker(
+      this.root,
+      NodeFilter.SHOW_ELEMENT,
+      this._nodeFilter
+    );
   }
 
   get root() {
@@ -58,7 +62,7 @@ export class HTMLElementWalker implements IHTMLElementWalker {
     const lastChild = this._treeWalker.lastChild();
     const nextSibling = this._treeWalker.nextSibling();
 
-    if (!isHTMLElement(lastChild)){
+    if (!isHTMLElement(lastChild)) {
       return null;
     }
 
@@ -106,7 +110,6 @@ export class HTMLElementWalker implements IHTMLElementWalker {
     return nextSibling;
   }
 
-
   previousSibling(): HTMLElement | null {
     const previousSibling = this._treeWalker.previousSibling();
     if (!isHTMLElement(previousSibling) || this.isOutsideRoot()) {
@@ -126,8 +129,11 @@ export class HTMLElementWalker implements IHTMLElementWalker {
       return currentNode;
     }
 
-    console.error('TreeWalker.currentNode is not a HTMLElement, it is', currentNode);
-    throw new Error('TreeWalker.currentNode is not a HTMLElement');
+    console.error(
+      "TreeWalker.currentNode is not a HTMLElement, it is",
+      currentNode
+    );
+    throw new Error("TreeWalker.currentNode is not a HTMLElement");
   }
 
   private isOutsideRoot() {
