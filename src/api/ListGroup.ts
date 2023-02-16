@@ -88,7 +88,7 @@ export class ListGroup extends Base {
       entity: LISTGROUP,
       id: this.id,
       type: "focuselement",
-      target: this.element,
+      element: this.element,
     };
 
     this.element.dispatchEvent(createFocusKitEvent(details));

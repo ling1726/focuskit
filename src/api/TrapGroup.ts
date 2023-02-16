@@ -83,7 +83,7 @@ export class TrapGroup extends Base {
       entity: TRAPGROUP,
       id: this.id,
       type: "focuselement",
-      target: this.element,
+      element: this.element,
     };
     const event = createFocusKitEvent(detail);
 
@@ -138,7 +138,7 @@ export class TrapGroup extends Base {
       entity: TRAPGROUP,
       id: this.id,
       type: "focuselement",
-      target: this._lastFocused,
+      element: this._lastFocused,
     };
     const event = createFocusKitEvent(detail);
 

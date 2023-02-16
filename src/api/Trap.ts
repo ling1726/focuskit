@@ -104,7 +104,7 @@ export class Trap extends Base {
       entity: TRAP,
       id: this.id,
       type: "focuselement",
-      target: this._lastFocused,
+      element: this._lastFocused,
     };
     const event = createFocusKitEvent(detail);
 

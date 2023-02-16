@@ -88,7 +88,7 @@ export interface UpdateTabIndexEvent extends BaseEvent<"updatetabindex"> {
 }
 
 export interface FocusElementEvent extends BaseEvent<"focuselement"> {
-  target?: HTMLElement;
+  element?: HTMLElement;
   strategy?: "first" | "last";
 }
 
