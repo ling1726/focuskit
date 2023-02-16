@@ -3,9 +3,9 @@ import { EntityId, FocusElementEvent, RecalcTabIndexesEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
 import { hasParentEntities } from "../utils/hasParentEntities";
 import { isFocusable } from "../utils/isFocusable";
-import { Base } from "./Base";
+import { Entity } from "./Entity";
 
-export class TrapGroup extends Base {
+export class TrapGroup extends Entity {
   private _lastFocused: HTMLElement;
   private _pre: HTMLElement;
   private _post: HTMLElement;

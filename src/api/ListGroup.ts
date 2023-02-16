@@ -8,9 +8,9 @@ import {
   UpdateTabIndexEvent,
 } from "../types";
 import { hasParentEntities } from "../utils/hasParentEntities";
-import { Base } from "./Base";
+import { Entity } from "./Entity";
 
-export class ListGroup extends Base {
+export class ListGroup extends Entity {
   private _axis: "horizontal" | "vertical" | "both";
   private _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
 

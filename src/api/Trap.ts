@@ -2,9 +2,9 @@ import { entities, events } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
 import { isHTMLElement } from "../utils/isHTMLElement";
-import { Base } from "./Base";
+import { Entity } from "./Entity";
 
-export class Trap extends Base {
+export class Trap extends Entity {
   private _lastFocused: HTMLElement;
   private _pre: HTMLElement;
   private _post: HTMLElement;

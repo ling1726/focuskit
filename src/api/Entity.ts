@@ -2,7 +2,7 @@ import { FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
 import { BaseEvent, EntityCategory, EntityId, EntityType } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 
-export abstract class Base {
+export abstract class Entity {
   element: HTMLElement;
   id: EntityId;
   entity: EntityType;

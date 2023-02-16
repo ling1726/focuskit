@@ -6,9 +6,9 @@ import {
   RecalcTabIndexesEvent,
 } from "../types";
 import { hasParentEntities } from "../utils/hasParentEntities";
-import { Base } from "./Base";
+import { Entity } from "./Entity";
 
-export class List extends Base implements IList {
+export class List extends Entity implements IList {
   private _axis: "horizontal" | "vertical" | "both";
   protected _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
 
