@@ -1,5 +1,5 @@
-import { FOCUS_KIT_ATTR } from "../constants";
-import { EntityCategory, EntityId, EntityType } from "../types";
+import { FOCUSKIT_EVENT, FOCUS_KIT_ATTR } from "../constants";
+import { BaseEvent, EntityCategory, EntityId, EntityType } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 
 export abstract class Base {
@@ -114,5 +114,22 @@ export abstract class Base {
     }
 
     this.onActiveChange();
+  }
+
+  protected createFocusKitEvent<T extends BaseEvent>(
+    details: Omit<T, "id" | "entity">
+  ): CustomEvent<T> {
+    const event = new CustomEvent<T>(FOCUSKIT_EVENT, {
+      cancelable: true,
+      bubbles: true,
+      // @ts-ignore
+      detail: {
+        id: this.id,
+        entity: this.entity,
+        ...details,
+      },
+    });
+
+    return event;
   }
 }

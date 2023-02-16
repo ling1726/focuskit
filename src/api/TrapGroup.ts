@@ -1,7 +1,6 @@
 import { entities, events } from "../constants";
 import { EntityId, FocusElementEvent, RecalcTabIndexesEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
-import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { hasParentEntities } from "../utils/hasParentEntities";
 import { isFocusable } from "../utils/isFocusable";
 import { Base } from "./Base";
@@ -30,9 +29,7 @@ export class TrapGroup extends Base {
   }
 
   recalcTabIndexes() {
-    const event = createFocusKitEvent<RecalcTabIndexesEvent>({
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
       originalTarget: this.element,
       type: "recalctabindexes",
     });
@@ -79,13 +76,10 @@ export class TrapGroup extends Base {
   };
 
   private _focusElement() {
-    const detail: FocusElementEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this.element,
-    };
-    const event = createFocusKitEvent(detail);
+    });
 
     this.element.dispatchEvent(event);
   }
@@ -117,13 +111,10 @@ export class TrapGroup extends Base {
   }
 
   protected _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
-    const detail: FocusElementEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       strategy,
-    };
-    const event = createFocusKitEvent(detail);
+    });
 
     this.element.dispatchEvent(event);
   }
@@ -134,13 +125,10 @@ export class TrapGroup extends Base {
       return;
     }
 
-    const detail: FocusElementEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this._lastFocused,
-    };
-    const event = createFocusKitEvent(detail);
+    });
 
     this.element.dispatchEvent(event);
   }

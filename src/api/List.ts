@@ -5,7 +5,6 @@ import {
   MoveEvent,
   RecalcTabIndexesEvent,
 } from "../types";
-import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { hasParentEntities } from "../utils/hasParentEntities";
 import { Base } from "./Base";
 
@@ -60,26 +59,19 @@ export class List extends Base implements IList {
   }
 
   private _recalcTabIndexes() {
-    const detail: RecalcTabIndexesEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
       type: events.RECALC_TABINDEXES,
       originalTarget: this.element,
-    };
+    });
 
-    const event = createFocusKitEvent(detail);
     this.element.dispatchEvent(event);
   }
 
   private _focus(direction: MoveEvent["direction"]) {
-    const detail: MoveEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<MoveEvent>({
       type: events.MOVE_EVENT,
       direction,
-    };
-
-    const event = createFocusKitEvent(detail);
+    });
 
     this.element.dispatchEvent(event);
   }

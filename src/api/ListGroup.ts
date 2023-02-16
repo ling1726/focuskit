@@ -7,7 +7,6 @@ import {
   RecalcTabIndexesEvent,
   UpdateTabIndexEvent,
 } from "../types";
-import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { hasParentEntities } from "../utils/hasParentEntities";
 import { Base } from "./Base";
 
@@ -43,49 +42,39 @@ export class ListGroup extends Base {
   }
 
   makeElementUntabbable() {
-    const details: UpdateTabIndexEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<UpdateTabIndexEvent>({
       type: events.UPDATE_TABINDEX_EVENT,
       element: this.element,
       tabindex: "focusable",
-    };
-
-    this.element.dispatchEvent(createFocusKitEvent(details));
+    });
+    this.element.dispatchEvent(event);
   }
 
   makeTabbable() {
-    const details: UpdateTabIndexEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<UpdateTabIndexEvent>({
       type: events.UPDATE_TABINDEX_EVENT,
       element: this.element,
       tabindex: "tabbable",
-    };
-
-    this.element.dispatchEvent(createFocusKitEvent(details));
+    });
+    this.element.dispatchEvent(event);
   }
 
   focusFirst() {
-    const details: FocusElementEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       strategy: "first",
-    };
+    });
 
-    this.element.dispatchEvent(createFocusKitEvent(details));
+    this.element.dispatchEvent(event);
   }
 
   focusElement() {
-    const details: FocusElementEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this.element,
-    };
+    });
 
-    this.element.dispatchEvent(createFocusKitEvent(details));
+    this.element.dispatchEvent(event);
   }
 
   protected onActiveChange(): void {
@@ -116,7 +105,7 @@ export class ListGroup extends Base {
       direction,
     };
 
-    const event = createFocusKitEvent(detail);
+    const event = this.createFocusKitEvent(detail);
 
     this.element.dispatchEvent(event);
   }
@@ -126,14 +115,10 @@ export class ListGroup extends Base {
   }
 
   private _recalcTabIndexes() {
-    const detail: RecalcTabIndexesEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<RecalcTabIndexesEvent>({
       type: events.RECALC_TABINDEXES,
       originalTarget: this.element,
-    };
-
-    const event = createFocusKitEvent(detail);
+    });
     this.element.dispatchEvent(event);
   }
 

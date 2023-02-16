@@ -1,7 +1,6 @@
 import { entities, events } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
-import { createFocusKitEvent } from "../utils/createFocusKitEvent";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { Base } from "./Base";
 
@@ -83,13 +82,10 @@ export class Trap extends Base {
   }
 
   protected _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
-    const detail: FocusElementEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       strategy,
-    };
-    const event = createFocusKitEvent(detail);
+    });
 
     this.element.dispatchEvent(event);
   }
@@ -100,13 +96,10 @@ export class Trap extends Base {
       return;
     }
 
-    const detail: FocusElementEvent = {
-      entity: this.entity,
-      id: this.id,
+    const event = this.createFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       element: this._lastFocused,
-    };
-    const event = createFocusKitEvent(detail);
+    });
 
     this.element.dispatchEvent(event);
   }
