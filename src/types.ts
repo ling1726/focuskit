@@ -28,12 +28,13 @@ export type DefaultTabbable = "first" | HTMLElement | null;
 export type TabAreaId = number | string;
 export type EntityId = number | string;
 export type EntityType = "List" | "Trap" | "TrapGroup" | "ListGroup";
+export type EntityCategory = "group" | "collection";
 
 export interface FocusKitFlags {
-  tabbable: boolean;
   active: boolean;
   id: EntityId;
   entity: EntityType;
+  category: EntityCategory;
 }
 
 export interface ListOptions {

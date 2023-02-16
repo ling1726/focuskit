@@ -1,5 +1,5 @@
 import { FOCUS_KIT_ATTR } from "../constants";
-import { EntityId, EntityType } from "../types";
+import { EntityCategory, EntityId, EntityType } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 
 export abstract class Base {
@@ -15,10 +15,11 @@ export abstract class Base {
   ) {
     const { id, entity } = options;
 
-    let tabbable = true;
+    let category: EntityCategory = "group";
     switch (entity) {
       case "List":
-        tabbable = false;
+        category = "collection";
+        break;
     }
 
     this.element = element;
@@ -27,7 +28,7 @@ export abstract class Base {
       active: false,
       entity,
       id,
-      tabbable,
+      category,
     };
 
     this.id = id;

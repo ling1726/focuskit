@@ -7,6 +7,7 @@ import {
   LISTGROUP,
 } from "../constants";
 import {
+  EntityCategory,
   FocusElementEvent,
   ListOptions,
   MoveEvent,
@@ -101,12 +102,12 @@ export class ListGroup extends Base {
   }
 
   protected _onFocusIn(): void {
-    this.tabbable = false;
+    this.category = "collection";
     this.active = true;
   }
 
   protected _onFocusOut() {
-    this.tabbable = true;
+    this.category = "group";
     this.active = false;
   }
 
@@ -127,8 +128,8 @@ export class ListGroup extends Base {
     this.element.dispatchEvent(event);
   }
 
-  private set tabbable(val: boolean) {
-    this.element._focuskitFlags!.tabbable = val;
+  private set category(val: EntityCategory) {
+    this.element._focuskitFlags!.category = val;
   }
 
   private _recalcTabIndexes() {
@@ -151,11 +152,11 @@ export class ListGroup extends Base {
     this._keyHandlers["Home"] = () => this._focus(DIRECTION_FIRST);
     this._keyHandlers["End"] = () => this._focus(DIRECTION_LAST);
     this._keyHandlers["Enter"] = () => {
-      this.tabbable = false;
+      this.category = "collection";
       this.active = true;
     };
     this._keyHandlers["Escape"] = () => {
-      this.tabbable = true;
+      this.category = "group";
       this.active = false;
     };
 

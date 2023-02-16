@@ -1,4 +1,5 @@
-import { FocusKitEventHandler, RecalcTabIndexesEvent } from "../types";
+import { FocusKitEventHandler } from "../types";
+import { hasParentGroup } from "../utils/hasParentGroup";
 import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isFocusable } from "../utils/isFocusable";
 import { isTabbable } from "../utils/isTabbable";
@@ -7,53 +8,34 @@ import { makeTabbable } from "../utils/makeTabbable";
 import { allFocusable } from "../utils/nodeFilters";
 import { isRecalcTabIndexesEvent } from "./assertions/isRecalcTabIndexesEvent";
 
-interface RecalcQueueItem extends RecalcTabIndexesEvent {
-  target: HTMLElement;
-}
-
 export const recalcTabIndexes: FocusKitEventHandler = (e, state, _next) => {
   if (!isRecalcTabIndexesEvent(e)) {
     return;
   }
 
-  let queuedRecalcs: RecalcQueueItem[] = [];
-  queuedRecalcs.push({
-    ...e,
-    target: state.target,
-  });
+  let queuedRecalcs: HTMLElement[] = [];
+  queuedRecalcs.push(state.target);
 
   while (queuedRecalcs.length) {
-    const { target } = queuedRecalcs.shift()!;
-    const { active, tabbable } = target._focuskitFlags!;
+    const target = queuedRecalcs.shift()!;
+    const { active, category } = target._focuskitFlags!;
 
-    let children: RecalcQueueItem[] = [];
-    if (tabbable) {
+    let children: HTMLElement[] = [];
+    if (category === "group") {
       console.log("started recalc", target);
-      if (active) {
-        children = recalcActiveTabbable(target, undefined, state.elementWalker);
-      } else {
-        children = recalcInActiveTabbable(
-          target,
-          undefined,
-          state.elementWalker
-        );
-      }
+
+      children = active
+        ? recalcActiveGroup(target, state.elementWalker)
+        : recalcInActiveGroup(target, state.elementWalker);
+
       console.log("finished recalc", target);
     } else {
       console.log("started recalc", target);
-      if (active) {
-        children = recalcActiveCollection(
-          target,
-          undefined,
-          state.elementWalker
-        );
-      } else {
-        children = recalcInActiveCollection(
-          target,
-          undefined,
-          state.elementWalker
-        );
-      }
+
+      children = active
+        ? recalcActiveCollection(target, state.elementWalker)
+        : recalcInActiveCollection(target, state.elementWalker);
+
       console.log("finished recalc", target);
     }
 
@@ -61,30 +43,22 @@ export const recalcTabIndexes: FocusKitEventHandler = (e, state, _next) => {
   }
 };
 
-function recalcActiveTabbable(
+function recalcActiveGroup(
   target: HTMLElement,
-  originalTarget: HTMLElement | undefined,
   elementWalker: HTMLElementWalker
-): RecalcQueueItem[] {
+): HTMLElement[] {
   makeTabbable(target);
   elementWalker.root = target;
-  const res: RecalcQueueItem[] = [];
+  const res: HTMLElement[] = [];
   elementWalker.filter = (element) => {
     if (!isFocusable(element)) {
       return NodeFilter.FILTER_SKIP;
     }
 
     if (element._focuskitFlags) {
-      const { entity, id } = element._focuskitFlags;
-      res.push({
-        entity,
-        id,
-        type: "recalctabindexes",
-        originalTarget: originalTarget ?? target,
-        target: element,
-      });
+      res.push(element);
 
-      if (!element._focuskitFlags.tabbable) {
+      if (element._focuskitFlags.category !== "group") {
         return NodeFilter.FILTER_REJECT;
       }
     }
@@ -97,12 +71,11 @@ function recalcActiveTabbable(
   return res;
 }
 
-function recalcInActiveTabbable(
+function recalcInActiveGroup(
   target: HTMLElement,
-  originalTarget: HTMLElement | undefined,
   elementWalker: HTMLElementWalker
-): RecalcQueueItem[] {
-  const res: RecalcQueueItem[] = [];
+): HTMLElement[] {
+  const res: HTMLElement[] = [];
   elementWalker.root = target;
   elementWalker.filter = (element) => {
     if (!isFocusable(element)) {
@@ -110,16 +83,9 @@ function recalcInActiveTabbable(
     }
 
     if (element._focuskitFlags) {
-      const { entity, id } = element._focuskitFlags;
-      res.push({
-        entity,
-        id,
-        type: "recalctabindexes",
-        originalTarget: originalTarget ?? target,
-        target: element,
-      });
+      res.push(element);
 
-      if (!element._focuskitFlags.tabbable) {
+      if (element._focuskitFlags.category !== "group") {
         return NodeFilter.FILTER_REJECT;
       }
     }
@@ -134,27 +100,9 @@ function recalcInActiveTabbable(
 
 function recalcInActiveCollection(
   target: HTMLElement,
-  originalTarget: HTMLElement | undefined,
   elementWalker: HTMLElementWalker
-): RecalcQueueItem[] {
-  const res: RecalcQueueItem[] = [];
-  const hasParentTabbable = () => {
-    let cur = target.parentElement;
-    while (cur) {
-      if (
-        cur._focuskitFlags &&
-        cur._focuskitFlags.tabbable &&
-        !cur._focuskitFlags.active
-      ) {
-        return true;
-      }
-
-      cur = cur.parentElement;
-    }
-
-    return false;
-  };
-
+): HTMLElement[] {
+  const res: HTMLElement[] = [];
   elementWalker.root = target;
   elementWalker.filter = (element) => {
     if (!isFocusable(element)) {
@@ -162,14 +110,7 @@ function recalcInActiveCollection(
     }
 
     if (element._focuskitFlags) {
-      const { entity, id } = element._focuskitFlags;
-      res.push({
-        entity,
-        id,
-        type: "recalctabindexes",
-        originalTarget: originalTarget ?? target,
-        target: element,
-      });
+      res.push(element);
     }
 
     makeFocusable(element);
@@ -178,7 +119,7 @@ function recalcInActiveCollection(
 
   while (elementWalker.nextElement()) {}
 
-  if (!hasParentTabbable()) {
+  if (!hasParentGroup(target)) {
     elementWalker.filter = allFocusable;
     const firstChild = elementWalker.firstChild();
     if (firstChild) {
@@ -191,10 +132,9 @@ function recalcInActiveCollection(
 
 function recalcActiveCollection(
   target: HTMLElement,
-  originalTarget: HTMLElement | undefined,
   elementWalker: HTMLElementWalker
-): RecalcQueueItem[] {
-  const res: RecalcQueueItem[] = [];
+): HTMLElement[] {
+  const res: HTMLElement[] = [];
   elementWalker.root = target;
   let foundTabbable = false;
   elementWalker.filter = (element) => {
@@ -203,14 +143,7 @@ function recalcActiveCollection(
     }
 
     if (element._focuskitFlags) {
-      const { entity, id } = element._focuskitFlags;
-      res.push({
-        entity,
-        id,
-        type: "recalctabindexes",
-        originalTarget: originalTarget ?? target,
-        target: element,
-      });
+      res.push(element);
     }
 
     if (isTabbable(element)) {
