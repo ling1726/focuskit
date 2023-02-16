@@ -58,7 +58,7 @@ export class Commander {
     const activeElement = isHTMLElement(document.activeElement)
       ? document.activeElement
       : null;
-    this._messagePipe.handleEvent(event, {
+    this._messagePipe.handleEvent(event.detail, {
       elementWalker: this._elementWalker,
       activeElement,
       target: event.target,

@@ -7,16 +7,19 @@ import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
 export const moveFirst: FocusKitEventHandler = (event, state, next) => {
-  if (!isMoveEvent(event) || event.detail.direction !== DIRECTION_FIRST) {
+  if (!isMoveEvent(event) || event.direction !== DIRECTION_FIRST) {
     next();
     return;
   }
 
-  const { activeElement, elementWalker } = state;
-  const target = event.target;
-  if (!isHTMLElement(target) || !isHTMLElement(activeElement) || !target.contains(activeElement)) {
+  const { activeElement, elementWalker, target } = state;
+  if (
+    !isHTMLElement(target) ||
+    !isHTMLElement(activeElement) ||
+    !target.contains(activeElement)
+  ) {
     next();
-    return
+    return;
   }
 
   elementWalker.currentElement = target;
@@ -29,5 +32,4 @@ export const moveFirst: FocusKitEventHandler = (event, state, next) => {
     makeFocusable(activeElement);
     makeTabbable(nextFocused);
   }
-}
-
+};

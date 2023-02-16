@@ -4,15 +4,15 @@ import { tabbable } from "../utils/nodeFilters";
 import { isFocusElementEvent } from "./assertions/isFocusElementEvent";
 
 export const focusLast: FocusKitEventHandler = (event, state, next) => {
-  if (!isFocusElementEvent(event) || event.detail.strategy !== 'last') {
+  if (!isFocusElementEvent(event) || event.strategy !== "last") {
     next();
     return;
   }
 
-  const target = event.target;
+  const { target } = state;
   if (!isHTMLElement(target)) {
     next();
-    return
+    return;
   }
 
   const elementWalker = state.elementWalker;
@@ -21,5 +21,4 @@ export const focusLast: FocusKitEventHandler = (event, state, next) => {
 
   const nextFocused = elementWalker.lastChild();
   nextFocused?.focus();
-}
-
+};

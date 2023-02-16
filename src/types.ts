@@ -49,7 +49,7 @@ export interface List {
 }
 
 export type FocusKitEventHandler = (
-  e: CustomEvent<BaseEvent>,
+  e: BaseEvent,
   state: FocusKitEventHandlerState,
   next: () => void
 ) => void;
@@ -57,10 +57,7 @@ export type Next = () => void;
 
 export type Pipe = {
   use: (...middlewares: FocusKitEventHandler[]) => void;
-  handleEvent: (
-    event: CustomEvent<BaseEvent>,
-    state: FocusKitEventHandlerState
-  ) => void;
+  handleEvent: (event: BaseEvent, state: FocusKitEventHandlerState) => void;
 };
 
 export interface FocusKitEventHandlerState {

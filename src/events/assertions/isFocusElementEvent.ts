@@ -1,5 +1,7 @@
 import { BaseEvent, FocusElementEvent } from "../../types";
 
-export function isFocusElementEvent(event: CustomEvent<BaseEvent>): event is CustomEvent<FocusElementEvent> {
-  return event.detail.type === 'focuselement';
+export function isFocusElementEvent(
+  event: BaseEvent
+): event is FocusElementEvent {
+  return event.type === "focuselement";
 }

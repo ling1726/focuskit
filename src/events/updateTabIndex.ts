@@ -9,7 +9,7 @@ export const updateTabIndex: FocusKitEventHandler = (event, _state, next) => {
     return;
   }
 
-  const { tabindex, element } = event.detail;
+  const { tabindex, element } = event;
 
   if (tabindex === "focusable") {
     makeFocusable(element);

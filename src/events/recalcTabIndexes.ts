@@ -18,7 +18,7 @@ export const recalcTabIndexes: FocusKitEventHandler = (e, state, _next) => {
 
   let queuedRecalcs: RecalcQueueItem[] = [];
   queuedRecalcs.push({
-    ...e.detail,
+    ...e,
     target: state.target,
   });
 
