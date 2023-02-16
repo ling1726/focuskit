@@ -1,6 +1,4 @@
 - handle events in order
-- Base class should queue events and have a flush method
-- update commands in after each other to array of commands
 - update tabindexes on dispose
 - verify runtime creation
 - handle default focused element

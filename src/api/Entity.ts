@@ -109,46 +109,28 @@ export abstract class Entity {
 
   private _onFocusInBase = (e: FocusEvent) => {
     const { target: nextFocused, relatedTarget: prevFocused } = e;
-    if (!isHTMLElement(nextFocused)) {
+    if (!isHTMLElement(nextFocused) || this.element === nextFocused) {
       return;
     }
 
-    if (prevFocused === null) {
-      if (this.element.contains(nextFocused) && this.element !== nextFocused) {
-        this._onFocusIn(prevFocused, nextFocused);
-      }
-
-      return;
-    }
-
-    if (!isHTMLElement(prevFocused)) {
-      return;
-    }
-
-    if (!this.element.contains(prevFocused) && this.element !== nextFocused) {
+    if (
+      prevFocused === null ||
+      (isHTMLElement(prevFocused) && !this.element.contains(prevFocused))
+    ) {
       this._onFocusIn(prevFocused, nextFocused);
     }
   };
 
   private _onFocusOutBase = (e: FocusEvent) => {
     const { target: prevFocused, relatedTarget: nextFocused } = e;
-    if (!isHTMLElement(prevFocused)) {
+    if (!isHTMLElement(prevFocused) || this.element === prevFocused) {
       return;
     }
 
-    if (nextFocused === null) {
-      if (this.element.contains(prevFocused) && this.element !== prevFocused) {
-        this._onFocusOut(prevFocused, nextFocused);
-      }
-
-      return;
-    }
-
-    if (!isHTMLElement(nextFocused)) {
-      return;
-    }
-
-    if (!this.element.contains(nextFocused) && this.element !== prevFocused) {
+    if (
+      nextFocused === null ||
+      (isHTMLElement(nextFocused) && !this.element.contains(nextFocused))
+    ) {
       this._onFocusOut(prevFocused, nextFocused);
     }
   };
