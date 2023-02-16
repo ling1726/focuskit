@@ -1,10 +1,4 @@
-import {
-  DIRECTION_FIRST,
-  DIRECTION_LAST,
-  DIRECTION_NEXT,
-  DIRECTION_PREV,
-  LIST,
-} from "../constants";
+import { entities, directions, events } from "../constants";
 import {
   List as IList,
   ListOptions,
@@ -23,7 +17,7 @@ export class List extends Base implements IList {
     const { id, axis = "both" } = options;
     super(element, {
       id,
-      entity: LIST,
+      entity: entities.LIST,
     });
 
     this.element = element;
@@ -45,12 +39,12 @@ export class List extends Base implements IList {
   protected onActiveChange(): void {}
 
   private _registerKeys() {
-    this._keyHandlers["ArrowUp"] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers["ArrowDown"] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers["ArrowLeft"] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers["ArrowRight"] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers["Home"] = () => this._focus(DIRECTION_FIRST);
-    this._keyHandlers["End"] = () => this._focus(DIRECTION_LAST);
+    this._keyHandlers["ArrowUp"] = () => this._focus(directions.PREV);
+    this._keyHandlers["ArrowDown"] = () => this._focus(directions.NEXT);
+    this._keyHandlers["ArrowLeft"] = () => this._focus(directions.PREV);
+    this._keyHandlers["ArrowRight"] = () => this._focus(directions.NEXT);
+    this._keyHandlers["Home"] = () => this._focus(directions.FIRST);
+    this._keyHandlers["End"] = () => this._focus(directions.LAST);
 
     switch (this._axis) {
       case "horizontal":
@@ -67,9 +61,9 @@ export class List extends Base implements IList {
 
   private _recalcTabIndexes() {
     const detail: RecalcTabIndexesEvent = {
-      entity: LIST,
+      entity: this.entity,
       id: this.id,
-      type: "recalctabindexes",
+      type: events.RECALC_TABINDEXES,
       originalTarget: this.element,
     };
 
@@ -79,9 +73,9 @@ export class List extends Base implements IList {
 
   private _focus(direction: MoveEvent["direction"]) {
     const detail: MoveEvent = {
-      entity: LIST,
+      entity: this.entity,
       id: this.id,
-      type: "move",
+      type: events.MOVE_EVENT,
       direction,
     };
 

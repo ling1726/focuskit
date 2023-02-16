@@ -1,14 +1,23 @@
 export const FOCUSKIT_EVENT = "focuskit";
-export const INIT_EVENT = "resettabindexes";
-export const MOVE_EVENT = "move";
-export const RECALC_TABINDEXES = "recalctabindexes";
-export const UPDATE_TABINDEX_EVENT = "updatetabindex";
-export const DIRECTION_NEXT = "next";
-export const DIRECTION_PREV = "prev";
-export const DIRECTION_FIRST = "first";
-export const DIRECTION_LAST = "last";
-export const LIST = "List";
-export const TRAPGROUP = "TrapGroup";
-export const TRAP = "Trap";
-export const LISTGROUP = "ListGroup";
 export const FOCUS_KIT_ATTR = "data-focuskit";
+
+export const entities = {
+  LIST: "List",
+  TRAPGROUP: "TrapGroup",
+  TRAP: "Trap",
+  LISTGROUP: "ListGroup",
+} as const;
+
+export const events = {
+  MOVE_EVENT: "move",
+  RECALC_TABINDEXES: "recalctabindexes",
+  UPDATE_TABINDEX_EVENT: "updatetabindex",
+  FOCUS_ELEMENT: "focuselement",
+} as const;
+
+export const directions = {
+  FIRST: "first",
+  LAST: "last",
+  NEXT: "next",
+  PREV: "prev",
+} as const;

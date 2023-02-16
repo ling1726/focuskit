@@ -1,11 +1,4 @@
-import {
-  DIRECTION_FIRST,
-  DIRECTION_LAST,
-  DIRECTION_NEXT,
-  DIRECTION_PREV,
-  LIST,
-  LISTGROUP,
-} from "../constants";
+import { entities, directions, events } from "../constants";
 import {
   EntityCategory,
   FocusElementEvent,
@@ -26,7 +19,7 @@ export class ListGroup extends Base {
     const { axis = "both" } = options;
     super(element, {
       ...options,
-      entity: LISTGROUP,
+      entity: entities.LISTGROUP,
     });
 
     this._axis = axis;
@@ -53,7 +46,7 @@ export class ListGroup extends Base {
     const details: UpdateTabIndexEvent = {
       entity: this.entity,
       id: this.id,
-      type: "updatetabindex",
+      type: events.UPDATE_TABINDEX_EVENT,
       element: this.element,
       tabindex: "focusable",
     };
@@ -65,7 +58,7 @@ export class ListGroup extends Base {
     const details: UpdateTabIndexEvent = {
       entity: this.entity,
       id: this.id,
-      type: "updatetabindex",
+      type: events.UPDATE_TABINDEX_EVENT,
       element: this.element,
       tabindex: "tabbable",
     };
@@ -77,7 +70,7 @@ export class ListGroup extends Base {
     const details: FocusElementEvent = {
       entity: this.entity,
       id: this.id,
-      type: "focuselement",
+      type: events.FOCUS_ELEMENT,
       strategy: "first",
     };
 
@@ -86,9 +79,9 @@ export class ListGroup extends Base {
 
   focusElement() {
     const details: FocusElementEvent = {
-      entity: LISTGROUP,
+      entity: this.entity,
       id: this.id,
-      type: "focuselement",
+      type: events.FOCUS_ELEMENT,
       element: this.element,
     };
 
@@ -117,9 +110,9 @@ export class ListGroup extends Base {
     }
 
     const detail: MoveEvent = {
-      entity: LISTGROUP,
+      entity: this.entity,
       id: this.id,
-      type: "move",
+      type: events.MOVE_EVENT,
       direction,
     };
 
@@ -134,9 +127,9 @@ export class ListGroup extends Base {
 
   private _recalcTabIndexes() {
     const detail: RecalcTabIndexesEvent = {
-      entity: LIST,
+      entity: this.entity,
       id: this.id,
-      type: "recalctabindexes",
+      type: events.RECALC_TABINDEXES,
       originalTarget: this.element,
     };
 
@@ -145,12 +138,12 @@ export class ListGroup extends Base {
   }
 
   private _registerKeys() {
-    this._keyHandlers["ArrowUp"] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers["ArrowDown"] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers["ArrowLeft"] = () => this._focus(DIRECTION_PREV);
-    this._keyHandlers["ArrowRight"] = () => this._focus(DIRECTION_NEXT);
-    this._keyHandlers["Home"] = () => this._focus(DIRECTION_FIRST);
-    this._keyHandlers["End"] = () => this._focus(DIRECTION_LAST);
+    this._keyHandlers["ArrowUp"] = () => this._focus(directions.PREV);
+    this._keyHandlers["ArrowDown"] = () => this._focus(directions.NEXT);
+    this._keyHandlers["ArrowLeft"] = () => this._focus(directions.PREV);
+    this._keyHandlers["ArrowRight"] = () => this._focus(directions.NEXT);
+    this._keyHandlers["Home"] = () => this._focus(directions.FIRST);
+    this._keyHandlers["End"] = () => this._focus(directions.LAST);
     this._keyHandlers["Enter"] = () => {
       this.category = "collection";
       this.active = true;

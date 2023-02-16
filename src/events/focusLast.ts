@@ -1,10 +1,11 @@
+import { directions } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { tabbable } from "../utils/nodeFilters";
 import { isFocusElementEvent } from "./assertions/isFocusElementEvent";
 
 export const focusLast: FocusKitEventHandler = (event, state, next) => {
-  if (!isFocusElementEvent(event) || event.strategy !== "last") {
+  if (!isFocusElementEvent(event) || event.strategy !== directions.LAST) {
     next();
     return;
   }

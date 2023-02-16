@@ -1,4 +1,4 @@
-import { TRAPGROUP } from "../constants";
+import { entities, events } from "../constants";
 import { EntityId, FocusElementEvent, RecalcTabIndexesEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
@@ -18,7 +18,7 @@ export class TrapGroup extends Base {
 
     super(element, {
       ...options,
-      entity: TRAPGROUP,
+      entity: entities.TRAPGROUP,
     });
 
     this._pre = createFocusGuard();
@@ -80,9 +80,9 @@ export class TrapGroup extends Base {
 
   private _focusElement() {
     const detail: FocusElementEvent = {
-      entity: TRAPGROUP,
+      entity: this.entity,
       id: this.id,
-      type: "focuselement",
+      type: events.FOCUS_ELEMENT,
       element: this.element,
     };
     const event = createFocusKitEvent(detail);
@@ -118,9 +118,9 @@ export class TrapGroup extends Base {
 
   protected _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
     const detail: FocusElementEvent = {
-      entity: TRAPGROUP,
+      entity: this.entity,
       id: this.id,
-      type: "focuselement",
+      type: events.FOCUS_ELEMENT,
       strategy,
     };
     const event = createFocusKitEvent(detail);
@@ -135,9 +135,9 @@ export class TrapGroup extends Base {
     }
 
     const detail: FocusElementEvent = {
-      entity: TRAPGROUP,
+      entity: this.entity,
       id: this.id,
-      type: "focuselement",
+      type: events.FOCUS_ELEMENT,
       element: this._lastFocused,
     };
     const event = createFocusKitEvent(detail);

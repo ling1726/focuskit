@@ -1,4 +1,4 @@
-import { TRAP } from "../constants";
+import { entities, events } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
 import { createFocusKitEvent } from "../utils/createFocusKitEvent";
@@ -14,7 +14,7 @@ export class Trap extends Base {
     const { id } = options;
     super(element, {
       id,
-      entity: TRAP,
+      entity: entities.TRAP,
     });
 
     this._pre = createFocusGuard();
@@ -84,9 +84,9 @@ export class Trap extends Base {
 
   protected _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
     const detail: FocusElementEvent = {
-      entity: TRAP,
+      entity: this.entity,
       id: this.id,
-      type: "focuselement",
+      type: events.FOCUS_ELEMENT,
       strategy,
     };
     const event = createFocusKitEvent(detail);
@@ -101,9 +101,9 @@ export class Trap extends Base {
     }
 
     const detail: FocusElementEvent = {
-      entity: TRAP,
+      entity: this.entity,
       id: this.id,
-      type: "focuselement",
+      type: events.FOCUS_ELEMENT,
       element: this._lastFocused,
     };
     const event = createFocusKitEvent(detail);

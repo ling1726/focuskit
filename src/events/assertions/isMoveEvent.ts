@@ -1,6 +1,6 @@
-import { MOVE_EVENT } from "../../constants";
+import { events } from "../../constants";
 import { BaseEvent, MoveEvent } from "../../types";
 
 export function isMoveEvent(event: BaseEvent): event is MoveEvent {
-  return event.type === MOVE_EVENT;
+  return event.type === events.MOVE_EVENT;
 }

@@ -1,4 +1,4 @@
-import { DIRECTION_FIRST } from "../constants";
+import { directions } from "../constants";
 import { FocusKitEventHandler } from "../types";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { makeFocusable } from "../utils/makeFocusable";
@@ -7,7 +7,7 @@ import { currentEntityFocusable } from "../utils/nodeFilters";
 import { isMoveEvent } from "./assertions/isMoveEvent";
 
 export const moveFirst: FocusKitEventHandler = (event, state, next) => {
-  if (!isMoveEvent(event) || event.direction !== DIRECTION_FIRST) {
+  if (!isMoveEvent(event) || event.direction !== directions.FIRST) {
     next();
     return;
   }
