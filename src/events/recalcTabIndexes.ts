@@ -8,8 +8,9 @@ import { makeTabbable } from "../utils/makeTabbable";
 import { allFocusable } from "../utils/nodeFilters";
 import { isRecalcTabIndexesEvent } from "./assertions/isRecalcTabIndexesEvent";
 
-export const recalcTabIndexes: FocusKitEventHandler = (e, state, _next) => {
+export const recalcTabIndexes: FocusKitEventHandler = (e, state, next) => {
   if (!isRecalcTabIndexesEvent(e)) {
+    next();
     return;
   }
 

@@ -1,5 +1,5 @@
 - handle events in order
-- make creating event easier -> shouldn't define base things all the time
+- Base class should queue events and have a flush method
 - update commands in after each other to array of commands
 - handle default focused element
 - short circuit based on isClosestEntity
