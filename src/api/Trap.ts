@@ -1,7 +1,6 @@
 import { entities, events } from "../constants";
 import { EntityId, FocusElementEvent } from "../types";
 import { createFocusGuard } from "../utils/createFocusGuard";
-import { isHTMLElement } from "../utils/isHTMLElement";
 import { Entity } from "./Entity";
 
 export class Trap extends Entity {
@@ -52,15 +51,11 @@ export class Trap extends Entity {
   }
 
   protected _onFocusIn(_prev: HTMLElement | null, next: HTMLElement): void {
-    if (!isHTMLElement(next)) {
-      return;
-    }
-
     this._lastFocused = next;
   }
 
   protected _onFocusOut(_prev: HTMLElement, next: HTMLElement | null): void {
-    if (!isHTMLElement(next)) {
+    if (!next) {
       this._focusLastFocused();
       return;
     }

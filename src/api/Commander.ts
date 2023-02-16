@@ -13,6 +13,7 @@ import { focusTarget } from "../events/focusTarget";
 import { isHTMLElement } from "../utils/isHTMLElement";
 import { updateTabIndex } from "../events/updateTabIndex";
 import { recalcTabIndexes } from "../events/recalcTabIndexes";
+import { assertHTMLElement } from "../utils/assertHTMLElement";
 
 export class Commander {
   public element: HTMLElement;
@@ -38,6 +39,8 @@ export class Commander {
   }
 
   private _handleEvent = (event: Event) => {
+    assertHTMLElement(event.target);
+
     if (!isFocusKitEvent(event)) {
       throw Error(
         `focuskit received an event of type ${event.type}, this is a bug`
@@ -45,10 +48,6 @@ export class Commander {
     }
 
     if (event.defaultPrevented) {
-      return;
-    }
-
-    if (!isHTMLElement(event.target)) {
       return;
     }
 
