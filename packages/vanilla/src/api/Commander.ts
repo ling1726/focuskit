@@ -23,8 +23,6 @@ export class Commander {
   constructor(element: HTMLElement) {
     this.element = element;
     this._elementWalker = new HTMLElementWalker(this.element);
-    this.element.setAttribute("data-commander", "");
-    this.element.addEventListener(FOCUSKIT_EVENT, this._handleEvent);
 
     this._messagePipe = createPipe();
     this._messagePipe.use(moveNext);
@@ -36,6 +34,13 @@ export class Commander {
     this._messagePipe.use(focusTarget);
     this._messagePipe.use(updateTabIndex);
     this._messagePipe.use(recalcTabIndexes);
+
+    if (this.element.hasAttribute('data-commander')) {
+      return;
+    }
+
+    this.element.setAttribute("data-commander", "");
+    this.element.addEventListener(FOCUSKIT_EVENT, this._handleEvent);
   }
 
   dispose() {
