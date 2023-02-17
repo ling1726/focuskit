@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { TrapGroup } from '@focuskit/vanilla';
 
-export function useTrapGroup(id: string) {
-  const instance = React.useRef<TrapGroup>();
+export function useTrapGroup<TElement extends HTMLElement = HTMLElement>(id: string) {
+  const elementRef = React.useRef<TElement>();
 
-  return React.useCallback((element: HTMLElement | null) => {
-    if (element) {
-      instance.current = new TrapGroup(element, { id });
-    } else {
-      instance.current?.dispose();
+  React.useEffect(() => {
+    if (elementRef.current) {
+      const list = new TrapGroup(elementRef.current, { id });
+      return () => list.dispose();
     }
-  }, []);
+  }, [id]);
+
+  return elementRef;
 }

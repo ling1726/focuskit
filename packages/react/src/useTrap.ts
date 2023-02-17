@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { Trap } from '@focuskit/vanilla';
 
-export function useTrap(id: string) {
-  const instance = React.useRef<Trap>();
+export function useTrap<TElement extends HTMLElement = HTMLElement>(id: string) {
+  const elementRef = React.useRef<TElement>();
 
-  return React.useCallback((element: HTMLElement | null) => {
-    if (element) {
-      instance.current = new Trap(element, { id });
-    } else {
-      instance.current?.dispose();
+  React.useEffect(() => {
+    if (elementRef.current) {
+      const list = new Trap(elementRef.current, { id });
+      return () => list.dispose();
     }
-  }, []);
+  }, [id]);
+
+  return elementRef;
 }

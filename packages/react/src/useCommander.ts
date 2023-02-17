@@ -1,12 +1,15 @@
-import * as React from "react";
-import { Commander } from "@focuskit/vanilla";
+import * as React from 'react';
+import { Commander } from '@focuskit/vanilla';
 
-export function useCommander(targetDocument: Document | null | undefined) {
-  React.useLayoutEffect(() => {
-    if (targetDocument?.body && !targetDocument.body.hasAttribute("data-commander")) {
-      const commander = new Commander(targetDocument.body);
-      return () => commander.dispose();
+export function useCommander<TElement extends HTMLElement = HTMLElement>(id: string) {
+  const elementRef = React.useRef<TElement>();
+
+  React.useEffect(() => {
+    if (elementRef.current) {
+      const list = new Commander(elementRef.current);
+      return () => list.dispose();
     }
+  }, [id]);
 
-  }, [targetDocument]);
+  return elementRef;
 }

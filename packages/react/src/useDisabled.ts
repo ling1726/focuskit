@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { Disabled } from '@focuskit/vanilla';
 
-export function useDisabled(id: string) {
-  const instance = React.useRef<Disabled>();
+export function useDisabled<TElement extends HTMLElement = HTMLElement>(id: string) {
+  const elementRef = React.useRef<TElement>();
 
-  return React.useCallback((element: HTMLElement | null) => {
-    if (element) {
-      instance.current = new Disabled(element, { id });
-    } else {
-      instance.current?.dispose();
+  React.useEffect(() => {
+    if (elementRef.current) {
+      const list = new Disabled(elementRef.current, { id });
+      return () => list.dispose();
     }
-  }, []);
+  }, [id]);
+
+  return elementRef;
 }
