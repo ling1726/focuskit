@@ -44,7 +44,13 @@ export class Commander {
   }
 
   private _handleEvent = (event: Event) => {
+    if (event.defaultPrevented) {
+      return;
+    }
+
     assertHTMLElement(event.target);
+    event.stopImmediatePropagation();
+    event.preventDefault();
 
     if (!isFocusKitEvent(event)) {
       throw Error(
