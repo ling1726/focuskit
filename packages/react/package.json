@@ -1,0 +1,22 @@
+{
+  "name": "@focuskit/react",
+  "version": "0.0.0",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "lint": "TIMING=1 eslint \"**/*.ts*\"",
+    "build": "tsup src/index.ts",
+    "dev": "npm run build -- --watch"
+  },
+  "dependencies": {
+    "@focuskit/core": "^0.0.1"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "*",
+    "tsconfig": "*"
+  }
+}

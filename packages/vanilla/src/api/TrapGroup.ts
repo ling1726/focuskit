@@ -28,7 +28,7 @@ export class TrapGroup extends Entity {
     this.recalcTabIndexes();
   }
 
-  protected dispose() {
+  dispose() {
     this.element.removeEventListener("keydown", this._onKeyDown);
   }
 

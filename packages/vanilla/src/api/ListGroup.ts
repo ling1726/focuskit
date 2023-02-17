@@ -28,7 +28,7 @@ export class ListGroup extends Entity {
     this.recalcTabIndexes();
   }
 
-  protected dispose() {
+  dispose() {
     super.dispose();
     this.element.removeEventListener("keydown", this._onKeyDown);
   }
