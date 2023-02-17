@@ -1,19 +1,32 @@
 {
-  "name": "@focuskit/core",
-  "private": true,
+  "name": "focuskit",
   "version": "0.0.0",
-  "type": "module",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "npx playwright test"
+    "postinstall": "npx playwright install",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "@lit-labs/ssr": "^3.0.1",
     "@playwright/test": "^1.30.0",
+    "eslint": "7.32.0",
     "lit-html": "^2.6.1",
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0"
-  }
+    "prettier": "latest",
+    "tsup": "^6.6.3",
+    "turbo": "latest",
+    "typescript": "^4.7.4",
+    "vite": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "packageManager": "npm@8.19.3"
 }

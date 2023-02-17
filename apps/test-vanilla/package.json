@@ -1,0 +1,17 @@
+{
+  "name": "test-container",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "npx playwright test"
+  },
+  "dependencies": {
+    "@focuskit/vanilla": "*"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "*"
+  }
+}

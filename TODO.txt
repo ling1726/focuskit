@@ -1,8 +1,0 @@
-- handle events in order
-- update tabindexes on dispose
-- verify runtime creation
-- handle default focused element
-- short circuit based on isClosestEntity
-- List: handle RTL -> use pipe state
-- Connect Traps
-- handle shift tab in tests;
