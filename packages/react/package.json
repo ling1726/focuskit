@@ -24,7 +24,7 @@
     "dev": "npm run build -- --watch"
   },
   "dependencies": {
-    "@focuskit/core": "^0.0.1"
+    "@focuskit/core": "^0.0.0"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
