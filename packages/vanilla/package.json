@@ -10,6 +10,9 @@
   "author": {
     "name": "Lingfan Gao"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "url": "https://github.com/ling1726/focuskit",
     "directory": "packages/vanilla"
