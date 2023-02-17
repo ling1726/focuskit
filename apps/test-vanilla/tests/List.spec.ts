@@ -100,3 +100,38 @@ test("should do circular navigation", async ({ page }) => {
   await page.keyboard.press("ArrowDown");
   await focuskitPage.waitForActiveElement("one");
 });
+
+test("should ignore layout wrapping elements", async ({ page }) => {
+  const focuskitPage = new FocusKitPage(page);
+  await focuskitPage.goto();
+
+  await focuskitPage.render(
+    html`
+      <div id="list">
+        <span>
+          <button type="button" id="one">One</button>
+        </span>
+        <span>
+          <button type="button" id="two">Two</button>
+        </span>
+        <span>
+          <button type="button" id="three">Three</button>
+        </span>
+        <span>
+          <button type="button" id="four">Four</button>
+        </span>
+        <span>
+          <button type="button" id="five">Five</button>
+        </span>
+        <span>
+          <button type="button" id="six">Six</button>
+        </span>
+      </div>
+    `
+  );
+
+  await focuskitPage.createCommander();
+  await focuskitPage.createList("list");
+  await focuskitPage.waitForTabIndexes(['two', 'three', 'four', 'five', 'six'], -1);
+  await focuskitPage.waitForTabIndexes(['one'], 0);
+});

@@ -55,16 +55,16 @@ function recalcActiveGroup(
   elementWalker.root = target;
   const res: HTMLElement[] = [];
   elementWalker.filter = (element) => {
-    if (!isFocusable(element)) {
-      return NodeFilter.FILTER_SKIP;
-    }
-
     if (element._focuskitFlags) {
       res.push(element);
 
       if (element._focuskitFlags.category !== "group") {
         return NodeFilter.FILTER_REJECT;
       }
+    }
+
+    if (!isFocusable(element)) {
+      return NodeFilter.FILTER_SKIP;
     }
 
     makeTabbable(element);
@@ -82,16 +82,16 @@ function recalcInActiveGroup(
   const res: HTMLElement[] = [];
   elementWalker.root = target;
   elementWalker.filter = (element) => {
-    if (!isFocusable(element)) {
-      return NodeFilter.FILTER_SKIP;
-    }
-
     if (element._focuskitFlags) {
       res.push(element);
 
       if (element._focuskitFlags.category !== "group") {
         return NodeFilter.FILTER_REJECT;
       }
+    }
+
+    if (!isFocusable(element)) {
+      return NodeFilter.FILTER_SKIP;
     }
 
     makeFocusable(element);
