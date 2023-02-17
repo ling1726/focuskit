@@ -63,10 +63,6 @@ export class Commander {
       );
     }
 
-    if (event.defaultPrevented) {
-      return;
-    }
-
     this._elementWalker.root = event.target;
     const activeElement = isHTMLElement(document.activeElement)
       ? document.activeElement
