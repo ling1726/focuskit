@@ -73,7 +73,6 @@ export class Commander {
       : [event.detail];
 
     for (const eventToHandle of eventsToHandle) {
-      console.log("handling event", eventToHandle);
       this._messagePipe.handleEvent(eventToHandle, {
         elementWalker: this._elementWalker,
         activeElement,

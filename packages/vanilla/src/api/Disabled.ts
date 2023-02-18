@@ -26,6 +26,5 @@ export class Disabled {
     }
 
     e.preventDefault();
-    console.log("cancelling event", e.detail);
   };
 }

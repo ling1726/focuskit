@@ -59,7 +59,6 @@ export abstract class Entity {
       return;
     }
 
-    console.log(this.entity, this.id, "active:", val);
     this._active = val;
 
     if (this.element._focuskitFlags) {

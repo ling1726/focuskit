@@ -24,23 +24,15 @@ export const recalcTabIndexes: FocusKitEventHandler = (e, state, next) => {
     let childEntities: HTMLElement[] = [];
 
     if (category === "group") {
-      console.log("started recalc", target);
-
       childEntities = active
         ? recalcActiveGroup(target, state.elementWalker)
         : recalcInActiveGroup(target, state.elementWalker);
-
-      console.log("finished recalc", target);
     }
 
     if (category === "collection") {
-      console.log("started recalc", target);
-
       childEntities = active
         ? recalcActiveCollection(target, state.elementWalker)
         : recalcInActiveCollection(target, state.elementWalker);
-
-      console.log("finished recalc", target);
     }
 
     queuedRecalcs = queuedRecalcs.concat(childEntities);

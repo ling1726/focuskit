@@ -34,16 +34,12 @@ export class Trap extends Entity {
     if (!this.element.contains(document.activeElement)) {
       this._focusWithStrategy("first");
     }
-
-    console.log("enable trap", this.id);
   }
 
   disable() {
     this.active = false;
     this._pre.remove();
     this._post.remove();
-
-    console.log("disable trap", this.id);
   }
 
   protected onActiveChange(): void {}
