@@ -20,21 +20,7 @@ export class Trap extends Entity {
     this._lastFocused = this.element;
   }
 
-  private _enable() {
-    const parentElement = this.element.parentElement;
-    if (!parentElement) {
-      return;
-    }
-
-    parentElement.insertBefore(this._pre, this.element);
-    parentElement.insertBefore(this._post, this.element.nextSibling);
-
-    if (!this.element.contains(document.activeElement)) {
-      this._focusWithStrategy("first");
-    }
-  }
-
-  private _disable() {
+  dispose() {
     this._pre.remove();
     this._post.remove();
   }
@@ -73,7 +59,26 @@ export class Trap extends Entity {
     }
   }
 
-  protected _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
+  private _enable() {
+    const parentElement = this.element.parentElement;
+    if (!parentElement) {
+      return;
+    }
+
+    parentElement.insertBefore(this._pre, this.element);
+    parentElement.insertBefore(this._post, this.element.nextSibling);
+
+    if (!this.element.contains(document.activeElement)) {
+      this._focusWithStrategy("first");
+    }
+  }
+
+  private _disable() {
+    this._pre.remove();
+    this._post.remove();
+  }
+
+  private _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {
     this.dispatchFocusKitEvent<FocusElementEvent>({
       type: events.FOCUS_ELEMENT,
       strategy,
