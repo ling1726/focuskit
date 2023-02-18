@@ -18,4 +18,8 @@ declare global {
       Disabled: typeof Disabled;
     };
   }
+
+  interface HTMLElement {
+    _trap?: Trap;
+  }
 }

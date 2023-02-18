@@ -34,6 +34,34 @@ export class FocusKitPage {
     }, id);
   }
 
+  async createTrap(id: string) {
+    await this.page.evaluate((id) => {
+      const element = document.getElementById(id) as HTMLElement;
+      element._trap = new window.FocusKit.Trap(element, { id });
+    }, id);
+
+    return {
+      enable: async () =>
+        await this.page.evaluate((id) => {
+          const element = document.getElementById(id) as HTMLElement;
+          if (!element._trap) {
+            throw new Error(`Element ${id} does not have a trap`);
+          }
+
+          element._trap.active = true;
+        }, id),
+      disable: async () =>
+        await this.page.evaluate((id) => {
+          const element = document.getElementById(id) as HTMLElement;
+          if (!element._trap) {
+            throw new Error(`Element ${id} does not have a trap`);
+          }
+
+          element._trap.active = false;
+        }, id),
+    };
+  }
+
   createCommander() {
     return this.page.evaluate(() => {
       new window.FocusKit.Commander(document.body);
@@ -44,43 +72,91 @@ export class FocusKitPage {
     return this.page.focus(`#${id}`);
   }
 
-  waitForActiveElement(id: string, options: { timeout?: number } = {}) {
+  async waitForActiveElement(id: string, options: { timeout?: number } = {}) {
     const { timeout = 1000 } = options;
-    return this.page.waitForFunction(
-      (id) => document.activeElement?.id === id,
-      id,
-      { timeout }
-    );
+    try {
+      await this.page.waitForFunction(
+        (id) => document.activeElement?.id === id,
+        id,
+        { timeout }
+      );
+    } catch {
+      const activeElementId = await this.page.evaluate(
+        () => document.activeElement?.id
+      );
+      throw new Error(
+        `Expected active element to be: ${id}, got: ${activeElementId}`
+      );
+    }
   }
 
-  waitForTabIndex(
+  async waitForTabIndex(
     id: string,
     tabIndex: number,
     options: { timeout?: 1000 } = {}
   ) {
     const { timeout = 1000 } = options;
-    return this.page.waitForFunction(
-      ({ id, tabIndex }) => document.getElementById(id)?.tabIndex === tabIndex,
-      { id, tabIndex },
-      { timeout }
-    );
+    try {
+      await this.page.waitForFunction(
+        ({ id, tabIndex }) =>
+          document.getElementById(id)?.tabIndex === tabIndex,
+        { id, tabIndex },
+        { timeout }
+      );
+    } catch {
+      const actualTabIndex = await this.page.evaluate(
+        () => document.getElementById(id)?.tabIndex
+      );
+      throw new Error(
+        `Expected tabIndex of ${id} to be: ${tabIndex}, got: ${actualTabIndex}`
+      );
+    }
   }
 
-  waitForTabIndexes(
+  async waitForTabIndexes(
     ids: string[],
     tabIndex: number,
     options: { timeout?: 1000 } = {}
   ) {
     const { timeout = 1000 } = options;
-    return this.page.waitForFunction(
-      ({ ids, tabIndex }) => {
-        return ids.reduce((prev, cur) => {
-          return prev && document.getElementById(cur)?.tabIndex === tabIndex;
-        }, true);
-      },
-      { ids, tabIndex },
-      { timeout }
-    );
+    try {
+      await this.page.waitForFunction(
+        ({ ids, tabIndex }) => {
+          return ids.reduce((prev, cur) => {
+            return prev && document.getElementById(cur)?.tabIndex === tabIndex;
+          }, true);
+        },
+        { ids, tabIndex },
+        { timeout }
+      );
+    } catch {
+      const actualTabIndexes = await this.page.evaluate((ids) => {
+        const res: Record<string, number | undefined> = {};
+        for (const id of ids) {
+          const el = document.getElementById(id);
+          res[id] = el?.tabIndex;
+        }
+
+        return res;
+      }, ids);
+
+      for (const id of ids) {
+        if (actualTabIndexes[id] !== tabIndex) {
+          console.error(
+            "Expected",
+            id,
+            "tabIndex to be:",
+            tabIndex,
+            "but got:",
+            actualTabIndexes[id]
+          );
+        }
+      }
+
+      throw new Error(
+        "Some tabIndexes were not expected, please check logs for details"
+      );
+    }
   }
 
   async render(template: TemplateResult) {

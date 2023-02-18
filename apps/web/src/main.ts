@@ -10,4 +10,4 @@ import ListGroupInList from "./scenarios/ListGroupInList";
 import ListGroupInTrapGroup from "./scenarios/ListGroupInTrapGroup";
 import NestedTrapGroups from "./scenarios/NestedTrapGroups";
 
-ListGroupInList(document.getElementById("app")!);
+TrapScenario(document.getElementById("app")!);

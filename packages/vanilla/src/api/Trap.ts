@@ -20,7 +20,7 @@ export class Trap extends Entity {
     this._lastFocused = this.element;
   }
 
-  enable() {
+  private _enable() {
     const parentElement = this.element.parentElement;
     if (!parentElement) {
       return;
@@ -29,26 +29,29 @@ export class Trap extends Entity {
     parentElement.insertBefore(this._pre, this.element);
     parentElement.insertBefore(this._post, this.element.nextSibling);
 
-    this.active = true;
-
     if (!this.element.contains(document.activeElement)) {
       this._focusWithStrategy("first");
     }
   }
 
-  disable() {
-    this.active = false;
+  private _disable() {
     this._pre.remove();
     this._post.remove();
   }
 
-  protected onActiveChange(): void {}
+  protected onActiveChange(): void {
+    this.active ? this._enable() : this._disable();
+  }
 
   protected _onFocusIn(_prev: HTMLElement | null, next: HTMLElement): void {
     this._lastFocused = next;
   }
 
   protected _onFocusOut(_prev: HTMLElement, next: HTMLElement | null): void {
+    if (!this.active) {
+      return;
+    }
+
     if (!next) {
       this._focusLastFocused();
       return;
