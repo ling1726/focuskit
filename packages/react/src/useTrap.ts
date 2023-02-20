@@ -9,26 +9,24 @@ const defaultImperative = {
 export function useTrap<TElement extends HTMLElement = HTMLElement>(
   id: string
 ) {
-  const elementRef = React.useRef<TElement>();
+  const disposeRef = React.useRef<() => void>(() => null);
   const imperativeRef = React.useRef<{
     enable: () => void;
     disable: () => void;
   }>(defaultImperative);
 
-  React.useEffect(() => {
-    if (elementRef.current) {
-      const trap = new Trap(elementRef.current, { id });
+  const elementRef = React.useCallback((el: HTMLElement | null) => {
+    if (el) {
+      const trap = new Trap(el, { id });
+      disposeRef.current = () => trap.dispose();
       imperativeRef.current = {
-        enable: () => {
-          trap.active = true;
-        },
-        disable: () => trap.active = false
+        enable: () => trap.active = true,
+        disable: () => trap.active = false,
       }
-
-      return () => {
-        trap.dispose();
-        imperativeRef.current = defaultImperative;
-      }
+    } else {
+      disposeRef.current();
+      disposeRef.current = () => null;
+      imperativeRef.current = defaultImperative;
     }
   }, [id]);
 
