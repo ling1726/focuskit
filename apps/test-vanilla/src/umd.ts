@@ -5,6 +5,7 @@ import {
   Trap,
   TrapGroup,
   ListGroup,
+  ariaHideOthers,
 } from "@focuskit/vanilla";
 
 window.FocusKit = {
@@ -14,4 +15,5 @@ window.FocusKit = {
   Disabled,
   Trap,
   TrapGroup,
+  ariaHideOthers,
 };

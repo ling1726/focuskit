@@ -1,3 +1,4 @@
+export * from './ariaHideOthers';
 export * from './assertHTMLElement';
 export * from './createFocusGuard';
 export * from './createPipe';

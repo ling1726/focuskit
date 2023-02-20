@@ -5,6 +5,7 @@ import {
   Commander,
   Disabled,
   ListGroup,
+  ariaHideOthers,
 } from "@focuskit/vanilla";
 
 declare global {
@@ -16,6 +17,7 @@ declare global {
       TrapGroup: typeof TrapGroup;
       Commander: typeof Commander;
       Disabled: typeof Disabled;
+      ariaHideOthers: typeof ariaHideOthers;
     };
   }
 

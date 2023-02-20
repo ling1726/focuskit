@@ -19,7 +19,9 @@ export function useTrap<TElement extends HTMLElement = HTMLElement>(
     if (elementRef.current) {
       const trap = new Trap(elementRef.current, { id });
       imperativeRef.current = {
-        enable: () => trap.active = true,
+        enable: () => {
+          trap.active = true;
+        },
         disable: () => trap.active = false
       }
 
