@@ -8,8 +8,8 @@ import { makeTabbable } from "../utils/makeTabbable";
 import { allFocusable } from "../utils/nodeFilters";
 import { isRecalcTabIndexesEvent } from "./assertions/isRecalcTabIndexesEvent";
 
-export const recalcTabIndexes: FocusKitEventHandler = (e, state, next) => {
-  if (!isRecalcTabIndexesEvent(e)) {
+export const recalcTabIndexes: FocusKitEventHandler = (event, state, next) => {
+  if (!isRecalcTabIndexesEvent(event)) {
     next();
     return;
   }
@@ -18,8 +18,11 @@ export const recalcTabIndexes: FocusKitEventHandler = (e, state, next) => {
   queuedRecalcs.push(state.target);
 
   while (queuedRecalcs.length) {
-    const target = queuedRecalcs.shift()!;
-    const { active, category } = target._focuskitFlags!;
+    const target = queuedRecalcs.shift();
+    if (!target || !target._focuskitFlags) {
+      continue;
+    }
+    const { active, category } = target._focuskitFlags;
 
     let childEntities: HTMLElement[] = [];
 
@@ -63,7 +66,9 @@ function recalcActiveGroup(
     return NodeFilter.FILTER_REJECT;
   };
 
-  while (elementWalker.nextElement()) {}
+  while (elementWalker.nextElement()) {
+    /* noop */
+  }
   return res;
 }
 
@@ -90,7 +95,9 @@ function recalcInActiveGroup(
     return NodeFilter.FILTER_REJECT;
   };
 
-  while (elementWalker.nextElement()) {}
+  while (elementWalker.nextElement()) {
+    /* noop */
+  }
   return res;
 }
 
@@ -113,7 +120,9 @@ function recalcInActiveCollection(
     return NodeFilter.FILTER_REJECT;
   };
 
-  while (elementWalker.nextElement()) {}
+  while (elementWalker.nextElement()) {
+    /* noop */
+  }
 
   if (!hasParentGroup(target)) {
     elementWalker.filter = allFocusable;
@@ -151,7 +160,9 @@ function recalcActiveCollection(
     return NodeFilter.FILTER_REJECT;
   };
 
-  while (elementWalker.nextElement()) {}
+  while (elementWalker.nextElement()) {
+    /* noop */
+  }
 
   if (!foundTabbable) {
     elementWalker.filter = allFocusable;

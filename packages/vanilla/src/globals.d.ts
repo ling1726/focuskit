@@ -6,7 +6,7 @@ import {
   Disabled,
   ListGroup,
 } from "./src/api";
-import { EntityType, FocusKitFlags } from "./src/types";
+import { FocusKitFlags } from "./types";
 
 declare global {
   interface Window {

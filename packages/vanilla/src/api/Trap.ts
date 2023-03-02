@@ -5,8 +5,8 @@ import { Entity } from "./Entity";
 
 export class Trap extends Entity {
   private _lastFocused: HTMLElement;
-  private _pre: HTMLElement;
-  private _post: HTMLElement;
+  private _previousGuard: HTMLElement;
+  private _postGuard: HTMLElement;
 
   constructor(element: HTMLElement, options: { id: EntityId }) {
     const { id } = options;
@@ -15,41 +15,50 @@ export class Trap extends Entity {
       entity: entities.TRAP,
     });
 
-    this._pre = createFocusGuard();
-    this._post = createFocusGuard();
+    this._previousGuard = createFocusGuard();
+    this._postGuard = createFocusGuard();
     this._lastFocused = this.element;
   }
 
   dispose() {
-    this._pre.remove();
-    this._post.remove();
+    this._previousGuard.remove();
+    this._postGuard.remove();
   }
 
   protected onActiveChange(): void {
     this.active ? this._enable() : this._disable();
   }
 
-  protected _onFocusIn(_prev: HTMLElement | null, next: HTMLElement): void {
-    this._lastFocused = next;
+  protected onFocusIn(
+    previousElement: HTMLElement | null,
+    nextElement: HTMLElement
+  ): void {
+    this._lastFocused = nextElement;
   }
 
-  protected _onFocusOut(_prev: HTMLElement, next: HTMLElement | null): void {
+  protected onFocusOut(
+    previousElement: HTMLElement,
+    nextElement: HTMLElement | null
+  ): void {
     if (!this.active) {
       return;
     }
 
-    if (!next) {
+    if (!nextElement) {
       this._focusLastFocused();
       return;
     }
 
-    if (this.element.contains(next)) {
+    if (this.element.contains(nextElement)) {
       return;
     }
 
-    if (next === this._pre || next === this._post) {
+    if (
+      nextElement === this._previousGuard ||
+      nextElement === this._postGuard
+    ) {
       let strategy: "first" | "last" = "first";
-      if (next === this._pre) {
+      if (nextElement === this._previousGuard) {
         strategy = "last";
       }
 
@@ -65,8 +74,8 @@ export class Trap extends Entity {
       return;
     }
 
-    parentElement.insertBefore(this._pre, this.element);
-    parentElement.insertBefore(this._post, this.element.nextSibling);
+    parentElement.insertBefore(this._previousGuard, this.element);
+    parentElement.insertBefore(this._postGuard, this.element.nextSibling);
 
     if (!this.element.contains(document.activeElement)) {
       this._focusWithStrategy("first");
@@ -74,8 +83,8 @@ export class Trap extends Entity {
   }
 
   private _disable() {
-    this._pre.remove();
-    this._post.remove();
+    this._previousGuard.remove();
+    this._postGuard.remove();
   }
 
   private _focusWithStrategy(strategy: FocusElementEvent["strategy"]) {

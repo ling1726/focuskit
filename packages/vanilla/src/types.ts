@@ -8,19 +8,6 @@ export interface FocusableWalker {
   last: () => HTMLElement | null;
 }
 
-export interface IHTMLElementWalker {
-  firstChild(): HTMLElement | null;
-  lastChild(): HTMLElement | null;
-  nextElement(): HTMLElement | null;
-  nextSibling(): HTMLElement | null;
-  parentElement(): HTMLElement | null;
-  previousElement(): HTMLElement | null;
-  previousSibling(): HTMLElement | null;
-  currentElement: HTMLElement;
-  readonly root: HTMLElement;
-  readonly filter: HTMLElementFilter;
-}
-
 export type HTMLElementFilter = (element: HTMLElement) => number;
 
 export type DefaultTabbable = "first" | HTMLElement | null;
@@ -44,13 +31,8 @@ export interface ListOptions {
   defaultTabbable?: DefaultTabbable;
 }
 
-export interface List {
-  element: HTMLElement;
-  id: EntityId;
-}
-
 export type FocusKitEventHandler = (
-  e: BaseEvent,
+  event: BaseEvent,
   state: FocusKitEventHandlerState,
   next: () => void
 ) => void;
@@ -67,16 +49,16 @@ export interface FocusKitEventHandlerState {
   target: HTMLElement;
 }
 
-type EventTypes =
+type EventType =
   | "move"
   | "focuselement"
   | "updatetabindex"
   | "recalctabindexes";
 
-export interface BaseEvent<TEventType extends EventTypes = EventTypes> {
+export interface BaseEvent<Type extends EventType = EventType> {
   id: EntityId;
   entity: EntityType;
-  type: TEventType;
+  type: Type;
 }
 
 export interface MoveEvent extends BaseEvent<"move"> {

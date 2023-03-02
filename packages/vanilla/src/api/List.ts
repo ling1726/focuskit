@@ -1,9 +1,11 @@
 import { entities, directions, events } from "../constants";
-import { List as IList, ListOptions, MoveEvent } from "../types";
+import { EntityId, ListOptions, MoveEvent } from "../types";
 import { hasParentEntities } from "../utils/hasParentEntities";
 import { Entity } from "./Entity";
 
-export class List extends Entity implements IList {
+export class List extends Entity {
+  element: HTMLElement;
+  id: EntityId;
   private _axis: "horizontal" | "vertical" | "both";
   protected _keyHandlers: Record<string, (e: KeyboardEvent) => void> = {};
 
@@ -27,15 +29,17 @@ export class List extends Entity implements IList {
     this.element.removeEventListener("keydown", this._onKeyDown);
   }
 
-  protected _onFocusIn(): void {
+  protected onFocusIn(): void {
     this.active = true;
   }
 
-  protected _onFocusOut(): void {
+  protected onFocusOut(): void {
     this.active = false;
   }
 
-  protected onActiveChange(): void {}
+  protected onActiveChange(): void {
+    /* noop */
+  }
 
   private _registerKeys() {
     this._keyHandlers["ArrowUp"] = () => this._move(directions.PREV);
@@ -65,18 +69,18 @@ export class List extends Entity implements IList {
     });
   }
 
-  protected _onKeyDown = (e: KeyboardEvent) => {
-    if (e.defaultPrevented) {
+  protected _onKeyDown = (event: KeyboardEvent) => {
+    if (event.defaultPrevented) {
       return;
     }
 
-    if (hasParentEntities(e.target, this.element)) {
+    if (hasParentEntities(event.target, this.element)) {
       return;
     }
 
-    if (e.key in this._keyHandlers) {
-      this._keyHandlers[e.key](e);
-      e.preventDefault();
+    if (event.key in this._keyHandlers) {
+      this._keyHandlers[event.key](event);
+      event.preventDefault();
     }
   };
 }

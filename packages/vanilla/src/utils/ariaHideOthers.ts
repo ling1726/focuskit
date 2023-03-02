@@ -17,7 +17,9 @@ export function ariaHideOthers(...visible: HTMLElement[]) {
     return NodeFilter.FILTER_SKIP;
   };
 
-  while (elementWalker.nextElement()) {}
+  while (elementWalker.nextElement()) {
+    /* noop */
+  }
 
   return hidden;
 }

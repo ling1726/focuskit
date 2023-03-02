@@ -52,14 +52,14 @@ export class TrapGroup extends Entity {
     }
   }
 
-  private _onKeyDown = (e: KeyboardEvent) => {
-    if (hasParentEntities(e.target, this.element)) {
+  private _onKeyDown = (event: KeyboardEvent) => {
+    if (hasParentEntities(event.target, this.element)) {
       return;
     }
 
-    switch (e.key) {
+    switch (event.key) {
       case "Enter":
-        if (e.target !== e.currentTarget) {
+        if (event.target !== event.currentTarget) {
           return;
         }
 
@@ -77,7 +77,7 @@ export class TrapGroup extends Entity {
     });
   }
 
-  protected _onFocusOut(_prev: HTMLElement, next: HTMLElement | null) {
+  protected onFocusOut(_prev: HTMLElement, next: HTMLElement | null) {
     if (!next) {
       this._focusLastFocused();
       return;
@@ -99,7 +99,7 @@ export class TrapGroup extends Entity {
     }
   }
 
-  protected _onFocusIn(_prev: HTMLElement | null, next: HTMLElement) {
+  protected onFocusIn(_prev: HTMLElement | null, next: HTMLElement) {
     this._lastFocused = next;
   }
 

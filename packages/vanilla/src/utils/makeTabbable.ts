@@ -1,3 +1,3 @@
-export function makeTabbable(el: HTMLElement) {
-  el.tabIndex = 0;
+export function makeTabbable(element: HTMLElement) {
+  element.tabIndex = 0;
 }

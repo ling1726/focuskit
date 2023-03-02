@@ -18,13 +18,13 @@ export class Disabled {
     this.element.removeEventListener(FOCUSKIT_EVENT, this._handleEvent, true);
   }
 
-  private _handleEvent = (e: Event) => {
-    if (!isFocusKitEvent(e)) {
+  private _handleEvent = (event: Event) => {
+    if (!isFocusKitEvent(event)) {
       throw Error(
-        `focuskit received an event of type ${e.type}, this is a bug`
+        `focuskit received an event of type ${event.type}, this is a bug`
       );
     }
 
-    e.preventDefault();
+    event.preventDefault();
   };
 }
