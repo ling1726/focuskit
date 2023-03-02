@@ -21,7 +21,7 @@
     "directory": "packages/vanilla"
   },
   "scripts": {
-    "lint": "TIMING=1 eslint \"**/*.ts*\"",
+    "lint": "eslint \"src/**/*.ts*\"",
     "build": "tsup src/index.ts",
     "dev": "npm run build -- --watch"
   },

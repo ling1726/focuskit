@@ -47,12 +47,12 @@ export class ListGroup extends Entity {
     }
   }
 
-  protected _onFocusIn(): void {
+  protected onFocusIn(): void {
     this.category = "collection";
     this.active = true;
   }
 
-  protected _onFocusOut() {
+  protected onFocusOut() {
     this.category = "group";
     this.active = false;
   }
@@ -95,7 +95,9 @@ export class ListGroup extends Entity {
   }
 
   private set category(val: EntityCategory) {
-    this.element._focuskitFlags!.category = val;
+    if (this.element._focuskitFlags) {
+      this.element._focuskitFlags.category = val;
+    }
   }
 
   private _registerKeys() {
@@ -134,19 +136,19 @@ export class ListGroup extends Entity {
     }
   }
 
-  private _onKeyDown = (e: KeyboardEvent) => {
-    if (e.defaultPrevented) {
+  private _onKeyDown = (event: KeyboardEvent) => {
+    if (event.defaultPrevented) {
       return;
     }
 
-    if (hasParentEntities(e.target, this.element)) {
+    if (hasParentEntities(event.target, this.element)) {
       return;
     }
 
-    if (e.key in this._keyHandlers) {
-      this._keyHandlers[e.key](e);
-      if (e.key !== "Enter" && e.key !== "Escape") {
-        e.preventDefault();
+    if (event.key in this._keyHandlers) {
+      this._keyHandlers[event.key](event);
+      if (event.key !== "Enter" && event.key !== "Escape") {
+        event.preventDefault();
       }
     }
   };

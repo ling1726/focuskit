@@ -40,13 +40,13 @@ export abstract class Entity {
     this.id = id;
     this.entity = entity;
     this.element.setAttribute(FOCUS_KIT_ATTR, this.id.toString());
-    this.element.addEventListener("focusin", this._onFocusInBase);
-    this.element.addEventListener("focusout", this._onFocusOutBase);
+    this.element.addEventListener("focusin", this._onFocusIn);
+    this.element.addEventListener("focusout", this._onFocusOut);
   }
 
   dispose() {
-    this.element.removeEventListener("focusin", this._onFocusInBase);
-    this.element.removeEventListener("focusout", this._onFocusOutBase);
+    this.element.removeEventListener("focusin", this._onFocusIn);
+    this.element.removeEventListener("focusout", this._onFocusOut);
     this.element.removeAttribute(FOCUS_KIT_ATTR);
   }
 
@@ -54,26 +54,26 @@ export abstract class Entity {
     return this._active;
   }
 
-  set active(val: boolean) {
-    if (val === this._active) {
+  set active(value: boolean) {
+    if (value === this._active) {
       return;
     }
 
-    this._active = val;
+    this._active = value;
 
     if (this.element._focuskitFlags) {
-      Object.assign(this.element._focuskitFlags, { active: val });
+      Object.assign(this.element._focuskitFlags, { active: value });
     }
 
     this.onActiveChange();
   }
 
-  protected abstract _onFocusIn(
+  protected abstract onFocusIn(
     prev: HTMLElement | null,
     next: HTMLElement
   ): void;
 
-  protected abstract _onFocusOut(
+  protected abstract onFocusOut(
     prev: HTMLElement,
     next: HTMLElement | null
   ): void;
@@ -86,12 +86,11 @@ export abstract class Entity {
     const event = new CustomEvent<T>(FOCUSKIT_EVENT, {
       cancelable: true,
       bubbles: true,
-      // @ts-ignore
       detail: {
         id: this.id,
         entity: this.entity,
         ...details,
-      },
+      } as T,
     });
 
     this.element.dispatchEvent(event);
@@ -104,8 +103,8 @@ export abstract class Entity {
     });
   }
 
-  private _onFocusInBase = (e: FocusEvent) => {
-    const { target: nextFocused, relatedTarget: prevFocused } = e;
+  private _onFocusIn = (event: FocusEvent) => {
+    const { target: nextFocused, relatedTarget: prevFocused } = event;
     if (!isHTMLElement(nextFocused) || this.element === nextFocused) {
       return;
     }
@@ -114,12 +113,12 @@ export abstract class Entity {
       prevFocused === null ||
       (isHTMLElement(prevFocused) && !this.element.contains(prevFocused))
     ) {
-      this._onFocusIn(prevFocused, nextFocused);
+      this.onFocusIn(prevFocused, nextFocused);
     }
   };
 
-  private _onFocusOutBase = (e: FocusEvent) => {
-    const { target: prevFocused, relatedTarget: nextFocused } = e;
+  private _onFocusOut = (event: FocusEvent) => {
+    const { target: prevFocused, relatedTarget: nextFocused } = event;
     if (!isHTMLElement(prevFocused) || this.element === prevFocused) {
       return;
     }
@@ -128,7 +127,7 @@ export abstract class Entity {
       nextFocused === null ||
       (isHTMLElement(nextFocused) && !this.element.contains(nextFocused))
     ) {
-      this._onFocusOut(prevFocused, nextFocused);
+      this.onFocusOut(prevFocused, nextFocused);
     }
   };
 }

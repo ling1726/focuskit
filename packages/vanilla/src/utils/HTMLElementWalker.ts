@@ -1,34 +1,32 @@
-import { HTMLElementFilter, IHTMLElementWalker } from "../types";
+import { HTMLElementFilter } from "../types";
 import { isHTMLElement } from "./isHTMLElement";
 
-export class HTMLElementWalker implements IHTMLElementWalker {
+export class HTMLElementWalker {
   public filter: HTMLElementFilter;
 
   private _treeWalker: TreeWalker;
-  private _nodeFilter: NodeFilter;
   private _root: HTMLElement;
 
-  constructor(root: HTMLElement, elementfilter?: HTMLElementFilter) {
-    this.filter = elementfilter ?? (() => NodeFilter.FILTER_ACCEPT);
+  constructor(root: HTMLElement, elementFilter?: HTMLElementFilter) {
+    this.filter = elementFilter ?? (() => NodeFilter.FILTER_ACCEPT);
     this._root = root;
-    this._nodeFilter = {
-      acceptNode: (node: Node) => {
-        if (!isHTMLElement(node)) {
-          return NodeFilter.FILTER_REJECT;
-        }
-
-        if (!this.root.contains(node)) {
-          return NodeFilter.FILTER_REJECT;
-        }
-
-        return this.filter(node);
-      },
-    };
 
     this._treeWalker = document.createTreeWalker(
       this.root,
       NodeFilter.SHOW_ELEMENT,
-      this._nodeFilter
+      {
+        acceptNode: (node: Node) => {
+          if (!isHTMLElement(node)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          if (!this.root.contains(node)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return this.filter(node);
+        },
+      }
     );
   }
 
@@ -36,31 +34,27 @@ export class HTMLElementWalker implements IHTMLElementWalker {
     return this._root;
   }
 
-  set root(val: HTMLElement) {
-    this._root = val;
+  set root(value: HTMLElement) {
+    this._root = value;
     this._treeWalker.currentNode = this._root;
   }
 
   firstChild(): HTMLElement | null {
     this._treeWalker.currentNode = this._root;
-    const firstChild = this._treeWalker.firstChild();
-    if (isHTMLElement(firstChild)) {
-      return firstChild;
-    }
-
-    return null;
+    return this._treeWalker.firstChild() as HTMLElement | null;
   }
 
   lastChild(): HTMLElement | null {
     this._treeWalker.currentNode = this._root;
-    const lastChild = this._treeWalker.lastChild();
-    const nextSibling = this._treeWalker.nextSibling();
+    const lastChild = this._treeWalker.lastChild() as HTMLElement | null;
 
-    if (!isHTMLElement(lastChild)) {
+    if (!lastChild) {
       return null;
     }
 
-    if (!isHTMLElement(nextSibling)) {
+    const nextSibling = this._treeWalker.nextSibling() as HTMLElement | null;
+
+    if (!nextSibling) {
       return lastChild;
     } else {
       this._treeWalker.currentNode = nextSibling;
@@ -69,8 +63,8 @@ export class HTMLElementWalker implements IHTMLElementWalker {
   }
 
   nextElement(): HTMLElement | null {
-    const nextNode = this._treeWalker.nextNode();
-    if (!isHTMLElement(nextNode) || this.isOutsideRoot()) {
+    const nextNode = this._treeWalker.nextNode() as HTMLElement | null;
+    if (!nextNode || this.isOutsideRoot()) {
       return null;
     }
 
@@ -78,17 +72,12 @@ export class HTMLElementWalker implements IHTMLElementWalker {
   }
 
   parentElement(): HTMLElement | null {
-    const parentNode = this._treeWalker.parentNode();
-    if (isHTMLElement(parentNode)) {
-      return parentNode;
-    }
-
-    return null;
+    return this._treeWalker.parentNode() as HTMLElement | null;
   }
 
   previousElement(): HTMLElement | null {
-    const previousNode = this._treeWalker.previousNode();
-    if (!isHTMLElement(previousNode) || this.isOutsideRoot()) {
+    const previousNode = this._treeWalker.previousNode() as HTMLElement | null;
+    if (!previousNode || this.isOutsideRoot()) {
       return null;
     }
 
@@ -96,8 +85,8 @@ export class HTMLElementWalker implements IHTMLElementWalker {
   }
 
   nextSibling(): HTMLElement | null {
-    const nextSibling = this._treeWalker.nextSibling();
-    if (!isHTMLElement(nextSibling) || this.isOutsideRoot()) {
+    const nextSibling = this._treeWalker.nextSibling() as HTMLElement | null;
+    if (!nextSibling || this.isOutsideRoot()) {
       return null;
     }
 
@@ -105,29 +94,21 @@ export class HTMLElementWalker implements IHTMLElementWalker {
   }
 
   previousSibling(): HTMLElement | null {
-    const previousSibling = this._treeWalker.previousSibling();
-    if (!isHTMLElement(previousSibling) || this.isOutsideRoot()) {
+    const previousSibling =
+      this._treeWalker.previousSibling() as HTMLElement | null;
+    if (!previousSibling || this.isOutsideRoot()) {
       return null;
     }
 
     return previousSibling;
   }
 
-  set currentElement(val: HTMLElement) {
-    this._treeWalker.currentNode = val;
+  set currentElement(value: HTMLElement) {
+    this._treeWalker.currentNode = value;
   }
 
   get currentElement() {
-    const currentNode = this._treeWalker.currentNode;
-    if (isHTMLElement(currentNode)) {
-      return currentNode;
-    }
-
-    console.error(
-      "TreeWalker.currentNode is not a HTMLElement, it is",
-      currentNode
-    );
-    throw new Error("TreeWalker.currentNode is not a HTMLElement");
+    return this._treeWalker.currentNode as HTMLElement;
   }
 
   private isOutsideRoot() {

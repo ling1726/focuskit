@@ -1,15 +1,15 @@
 export const hasParentGroup = (element: HTMLElement) => {
-  let cur = element.parentElement;
-  while (cur) {
+  let currentElement = element.parentElement;
+  while (currentElement) {
     if (
-      cur._focuskitFlags &&
-      cur._focuskitFlags.category === "group" &&
-      !cur._focuskitFlags.active
+      currentElement._focuskitFlags &&
+      currentElement._focuskitFlags.category === "group" &&
+      !currentElement._focuskitFlags.active
     ) {
       return true;
     }
 
-    cur = cur.parentElement;
+    currentElement = currentElement.parentElement;
   }
 
   return false;
