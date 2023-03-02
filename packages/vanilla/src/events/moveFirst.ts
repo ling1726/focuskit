@@ -18,10 +18,8 @@ export const moveFirst: FocusKitEventHandler = (event, state, next) => {
   }
 
   elementWalker.currentElement = target;
-  const filter = currentEntityFocusable(target);
-  elementWalker.filter = filter;
 
-  const nextFocused = elementWalker.firstChild();
+  const nextFocused = elementWalker.firstChild(currentEntityFocusable(target));
   if (nextFocused) {
     nextFocused.focus();
     makeFocusable(activeElement);

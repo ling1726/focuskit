@@ -35,7 +35,7 @@ export class Commander {
     this._messagePipe.use(updateTabIndex);
     this._messagePipe.use(recalcTabIndexes);
 
-    if (this.element.hasAttribute('data-commander')) {
+    if (this.element.hasAttribute("data-commander")) {
       return;
     }
 

@@ -13,8 +13,7 @@ export const focusLast: FocusKitEventHandler = (event, state, next) => {
 
   const elementWalker = state.elementWalker;
   elementWalker.currentElement = target;
-  elementWalker.filter = tabbable;
 
-  const nextFocused = elementWalker.lastChild();
+  const nextFocused = elementWalker.lastChild(tabbable);
   nextFocused?.focus();
 };
