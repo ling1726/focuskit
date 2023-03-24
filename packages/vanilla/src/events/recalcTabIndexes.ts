@@ -1,4 +1,4 @@
-import { FocusKitEventHandler } from "../types";
+import { FocusKitEventHandler, HTMLElementFilter } from "../types";
 import { hasParentGroup } from "../utils/hasParentGroup";
 import { HTMLElementWalker } from "../utils/HTMLElementWalker";
 import { isFocusable } from "../utils/isFocusable";
@@ -49,7 +49,8 @@ function recalcActiveGroup(
   makeTabbable(target);
   elementWalker.root = target;
   const res: HTMLElement[] = [];
-  elementWalker.filter = (element) => {
+
+  const filter: HTMLElementFilter = (element) => {
     if (element._focuskitFlags) {
       res.push(element);
 
@@ -66,7 +67,7 @@ function recalcActiveGroup(
     return NodeFilter.FILTER_REJECT;
   };
 
-  while (elementWalker.nextElement()) {
+  while (elementWalker.nextElement(filter)) {
     /* noop */
   }
   return res;
@@ -78,7 +79,8 @@ function recalcInActiveGroup(
 ): HTMLElement[] {
   const res: HTMLElement[] = [];
   elementWalker.root = target;
-  elementWalker.filter = (element) => {
+
+  const filter: HTMLElementFilter = (element) => {
     if (element._focuskitFlags) {
       res.push(element);
 
@@ -94,8 +96,7 @@ function recalcInActiveGroup(
     makeFocusable(element);
     return NodeFilter.FILTER_REJECT;
   };
-
-  while (elementWalker.nextElement()) {
+  while (elementWalker.nextElement(filter)) {
     /* noop */
   }
   return res;
@@ -107,7 +108,8 @@ function recalcInActiveCollection(
 ): HTMLElement[] {
   const res: HTMLElement[] = [];
   elementWalker.root = target;
-  elementWalker.filter = (element) => {
+
+  const filter: HTMLElementFilter = (element) => {
     if (!isFocusable(element)) {
       return NodeFilter.FILTER_SKIP;
     }
@@ -119,14 +121,12 @@ function recalcInActiveCollection(
     makeFocusable(element);
     return NodeFilter.FILTER_REJECT;
   };
-
-  while (elementWalker.nextElement()) {
+  while (elementWalker.nextElement(filter)) {
     /* noop */
   }
 
   if (!hasParentGroup(target)) {
-    elementWalker.filter = allFocusable;
-    const firstChild = elementWalker.firstChild();
+    const firstChild = elementWalker.firstChild(allFocusable);
     if (firstChild) {
       makeTabbable(firstChild);
     }
@@ -142,7 +142,8 @@ function recalcActiveCollection(
   const res: HTMLElement[] = [];
   elementWalker.root = target;
   let foundTabbable = false;
-  elementWalker.filter = (element) => {
+
+  const filter: HTMLElementFilter = (element) => {
     if (!isFocusable(element)) {
       return NodeFilter.FILTER_SKIP;
     }
@@ -159,14 +160,12 @@ function recalcActiveCollection(
 
     return NodeFilter.FILTER_REJECT;
   };
-
-  while (elementWalker.nextElement()) {
+  while (elementWalker.nextElement(filter)) {
     /* noop */
   }
 
   if (!foundTabbable) {
-    elementWalker.filter = allFocusable;
-    const firstChild = elementWalker.firstChild();
+    const firstChild = elementWalker.firstChild(allFocusable);
     if (firstChild) {
       makeTabbable(firstChild);
     }

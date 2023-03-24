@@ -19,9 +19,7 @@ export const moveLast: FocusKitEventHandler = (event, state, next) => {
 
   elementWalker.currentElement = target;
   const filter = currentEntityFocusable(target);
-  elementWalker.filter = filter;
-
-  const nextFocused = elementWalker.lastChild();
+  const nextFocused = elementWalker.lastElement(filter);
   if (nextFocused) {
     makeFocusable(activeElement);
     makeTabbable(nextFocused);

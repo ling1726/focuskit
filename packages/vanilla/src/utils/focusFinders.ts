@@ -5,8 +5,7 @@ const elementWalker = new HTMLElementWalker(document.body);
 
 export function findFirstFocusable(container: HTMLElement) {
   elementWalker.root = container;
-  elementWalker.filter = allFocusable;
-  return elementWalker.firstChild();
+  return elementWalker.firstChild(allFocusable);
 }
 
 export function findPrevFocusable(
@@ -15,8 +14,7 @@ export function findPrevFocusable(
 ) {
   elementWalker.root = container;
   elementWalker.currentElement = current;
-  elementWalker.filter = allFocusable;
-  return elementWalker.previousElement();
+  return elementWalker.previousElement(allFocusable);
 }
 
 export function findNextFocusable(
@@ -25,14 +23,12 @@ export function findNextFocusable(
 ) {
   elementWalker.root = container;
   elementWalker.currentElement = current;
-  elementWalker.filter = allFocusable;
-  return elementWalker.nextElement();
+  return elementWalker.nextElement(allFocusable);
 }
 
 export function findLastFocusable(container: HTMLElement) {
   elementWalker.root = container;
-  elementWalker.filter = allFocusable;
-  return elementWalker.lastChild();
+  return elementWalker.lastChild(allFocusable);
 }
 
 export function findAllFocusable(
@@ -41,13 +37,12 @@ export function findAllFocusable(
 ) {
   const focusable: HTMLElement[] = [];
   elementWalker.root = container;
-  elementWalker.filter = allFocusable;
-  let cur = elementWalker.nextElement();
+  let cur = elementWalker.nextElement(allFocusable);
   while (cur) {
     if (filter(cur)) {
       focusable.push(cur);
     }
-    cur = elementWalker.nextElement();
+    cur = elementWalker.nextElement(allFocusable);
   }
 
   return focusable;
@@ -55,12 +50,10 @@ export function findAllFocusable(
 
 export function findFirstTabbable(container: HTMLElement) {
   elementWalker.root = container;
-  elementWalker.filter = tabbable;
-  return elementWalker.firstChild();
+  return elementWalker.firstChild(tabbable);
 }
 
 export function findLastTabbable(container: HTMLElement) {
   elementWalker.root = container;
-  elementWalker.filter = tabbable;
-  return elementWalker.lastChild();
+  return elementWalker.lastChild(tabbable);
 }

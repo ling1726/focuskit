@@ -1,14 +1,18 @@
 import { HTMLElementFilter } from "../types";
 import { isHTMLElement } from "./isHTMLElement";
 
+function defaultElementFilter() {
+  return NodeFilter.FILTER_ACCEPT;
+}
+
 export class HTMLElementWalker {
-  public filter: HTMLElementFilter;
+  private _elementFilter: HTMLElementFilter;
 
   private _treeWalker: TreeWalker;
   private _root: HTMLElement;
 
-  constructor(root: HTMLElement, elementFilter?: HTMLElementFilter) {
-    this.filter = elementFilter ?? (() => NodeFilter.FILTER_ACCEPT);
+  constructor(root: HTMLElement) {
+    this._elementFilter = defaultElementFilter;
     this._root = root;
 
     this._treeWalker = document.createTreeWalker(
@@ -24,7 +28,7 @@ export class HTMLElementWalker {
             return NodeFilter.FILTER_REJECT;
           }
 
-          return this.filter(node);
+          return this._elementFilter(node);
         },
       }
     );
@@ -39,31 +43,46 @@ export class HTMLElementWalker {
     this._treeWalker.currentNode = this._root;
   }
 
-  firstChild(): HTMLElement | null {
+  firstChild(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
     this._treeWalker.currentNode = this._root;
-    return this._treeWalker.firstChild() as HTMLElement | null;
+    const firstChild = this._treeWalker.firstChild() as HTMLElement | null;
+    this._elementFilter = defaultElementFilter;
+    return firstChild;
   }
 
-  lastChild(): HTMLElement | null {
+  lastChild(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
     this._treeWalker.currentNode = this._root;
     const lastChild = this._treeWalker.lastChild() as HTMLElement | null;
-
-    if (!lastChild) {
-      return null;
-    }
-
-    const nextSibling = this._treeWalker.nextSibling() as HTMLElement | null;
-
-    if (!nextSibling) {
-      return lastChild;
-    } else {
-      this._treeWalker.currentNode = nextSibling;
-      return this.previousElement();
-    }
+    this._elementFilter = defaultElementFilter;
+    return lastChild;
   }
 
-  nextElement(): HTMLElement | null {
+  lastElement(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
+    this._treeWalker.currentNode = this._root;
+    let lastElement: HTMLElement | null = null;
+    let nextElement: HTMLElement | null = null;
+    while ((nextElement = this._treeWalker.lastChild() as HTMLElement | null)) {
+      lastElement = nextElement;
+    }
+    this._elementFilter = defaultElementFilter;
+    return lastElement;
+  }
+
+  nextElement(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
     const nextNode = this._treeWalker.nextNode() as HTMLElement | null;
+    this._elementFilter = defaultElementFilter;
     if (!nextNode || this.isOutsideRoot()) {
       return null;
     }
@@ -71,12 +90,21 @@ export class HTMLElementWalker {
     return nextNode;
   }
 
-  parentElement(): HTMLElement | null {
-    return this._treeWalker.parentNode() as HTMLElement | null;
+  parentElement(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
+    const parentElement = this._treeWalker.parentNode() as HTMLElement | null;
+    this._elementFilter = defaultElementFilter;
+    return parentElement;
   }
 
-  previousElement(): HTMLElement | null {
+  previousElement(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
     const previousNode = this._treeWalker.previousNode() as HTMLElement | null;
+    this._elementFilter = defaultElementFilter;
     if (!previousNode || this.isOutsideRoot()) {
       return null;
     }
@@ -84,8 +112,12 @@ export class HTMLElementWalker {
     return previousNode;
   }
 
-  nextSibling(): HTMLElement | null {
+  nextSibling(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
     const nextSibling = this._treeWalker.nextSibling() as HTMLElement | null;
+    this._elementFilter = defaultElementFilter;
     if (!nextSibling || this.isOutsideRoot()) {
       return null;
     }
@@ -93,9 +125,13 @@ export class HTMLElementWalker {
     return nextSibling;
   }
 
-  previousSibling(): HTMLElement | null {
+  previousSibling(
+    elementFilter: HTMLElementFilter = defaultElementFilter
+  ): HTMLElement | null {
+    this._elementFilter = elementFilter;
     const previousSibling =
       this._treeWalker.previousSibling() as HTMLElement | null;
+    this._elementFilter = defaultElementFilter;
     if (!previousSibling || this.isOutsideRoot()) {
       return null;
     }

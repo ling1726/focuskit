@@ -10,8 +10,7 @@ export const focusFirst: FocusKitEventHandler = (event, state, next) => {
   }
 
   const elementWalker = state.elementWalker;
-  elementWalker.filter = tabbable;
 
-  const nextFocused = elementWalker.firstChild();
+  const nextFocused = elementWalker.firstChild(tabbable);
   nextFocused?.focus();
 };
